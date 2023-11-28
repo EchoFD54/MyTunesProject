@@ -175,7 +175,7 @@ public class MainWindowController {
     }
 
     private void playCurrentSong(){
-        if (canPlaySong==true){
+        if (canPlaySong){
             mediaPlayer.play();
         }
     }
