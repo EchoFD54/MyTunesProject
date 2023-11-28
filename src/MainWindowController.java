@@ -37,74 +37,39 @@ public class MainWindowController {
                 songList.add(new Media(file.toURI().toString()));
             }
         }
+
+        if (songList.isEmpty()) {
+            return;  // No need to proceed if there are no songs
+        }
+        playNextSong();
+
         System.out.println("Number of songs in the playlist: " + songList.size());
-        mediaPlayer = new MediaPlayer(songList.get(songIndex));
-        mediaView.setMediaPlayer(mediaPlayer);
-
         //volume
-        volumeSlider.setValue(mediaPlayer.getVolume() * 50); // set initial value
-        volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            mediaPlayer.setVolume(newValue.doubleValue() / 100.0);
-        });
+        setVolumeSlider();
 
-        //set the song progress
-        songProgress.valueChangingProperty().addListener((observable, oldValue, isChanging) -> {
-            if (!isChanging && mediaPlayer != null) {
-                double duration = mediaPlayer.getTotalDuration().toMillis();
-                double currentTime = songProgress.getValue() * duration / 100.0;
-                mediaPlayer.seek(new Duration(currentTime));
-            }
-        });
 
-        // Update the song progress as the media plays
-        mediaPlayer.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
-            if (!songProgress.isValueChanging()) {
-                double progress = (newValue.toMillis() / mediaPlayer.getTotalDuration().toMillis()) * 100.0;
-                songProgress.setValue(progress);
-            }
-        });
     }
+
 
     private void playNextSong(){
         if (songIndex < songList.size()) {
             if (mediaPlayer != null) {
                 mediaPlayer.stop();
-                mediaPlayer.dispose();
             }
-
             mediaPlayer = new MediaPlayer(songList.get(songIndex));
-
-            // Set up the progress slider for the new song
-            songProgress.setValue(0);
-            songProgress.valueChangingProperty().setValue(null);
-            songProgress.valueChangingProperty().addListener((observable, oldValue, isChanging) -> {
-                if (!isChanging) {
-                    double duration = mediaPlayer.getTotalDuration().toMillis();
-                    double currentTime = songProgress.getValue() * duration / 100.0;
-                    mediaPlayer.seek(new Duration(currentTime));
-                }
-            });
-
-            // Update the progress slider as the media plays
-            songProgress.valueChangingProperty().setValue(null);
-            mediaPlayer.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
-                if (!songProgress.isValueChanging()) {
-                    double progress = (newValue.toMillis() / mediaPlayer.getTotalDuration().toMillis()) * 100.0;
-                    songProgress.setValue(progress);
-                }
-            });
 
             // Set up the end of media handler
             mediaPlayer.setOnEndOfMedia(() -> {
-                if (mediaPlayer.getStatus() == MediaPlayer.Status.STOPPED) {
+                if (mediaPlayer != null && mediaPlayer.getCurrentTime().equals(mediaPlayer.getTotalDuration())) {
                     songIndex++;
                     playNextSong();
+                    mediaPlayer.setAutoPlay(true);
                 }
             });
 
-            // Auto-play the media
-            mediaPlayer.setAutoPlay(true);
             mediaView.setMediaPlayer(mediaPlayer);
+            setSongProgress();
+            setVolumeSlider();
         } else {
             // All songs have been played, loop back to the first song
             songIndex = 0;
@@ -113,6 +78,7 @@ public class MainWindowController {
     }
 
     public void clickPlayBtn(ActionEvent actionEvent) {
+        setSongProgress();
         if (mediaPlayer == null) {
             // Initialize MediaPlayer and play the first song
             if (!songList.isEmpty()) {
@@ -146,5 +112,35 @@ public class MainWindowController {
             playNextSong();
         }
     }
+
+    public void setSongProgress(){
+        // Set up the progress slider for the new song
+        songProgress.setValue(0);
+        songProgress.valueChangingProperty().setValue(null);
+        songProgress.valueChangingProperty().addListener((observable, oldValue, isChanging) -> {
+            if (!isChanging) {
+                double duration = mediaPlayer.getTotalDuration().toMillis();
+                double currentTime = songProgress.getValue() * duration / 100.0;
+                mediaPlayer.seek(new Duration(currentTime));
+            }
+        });
+
+        // Update the progress slider as the media plays
+        songProgress.valueChangingProperty().setValue(null);
+        mediaPlayer.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
+            if (!songProgress.isValueChanging()) {
+                double progress = (newValue.toMillis() / mediaPlayer.getTotalDuration().toMillis()) * 100.0;
+                songProgress.setValue(progress);
+            }
+        });
+    }
+
+    public void setVolumeSlider(){
+        volumeSlider.setValue(mediaPlayer.getVolume() * 50); // set initial value
+        volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            mediaPlayer.setVolume(newValue.doubleValue() / 100.0);
+        });
+    }
+
 
 }
