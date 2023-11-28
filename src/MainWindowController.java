@@ -28,12 +28,12 @@ public class MainWindowController {
     private int songIndex = 0;
 
 
-    public void initialize(){
+    public void initialize() {
         File folder = new File("C:\\Users\\aaron\\Music\\Mytunes");
         File[] songs = folder.listFiles(((dir, name) -> name.endsWith(".mp3")));
 
-        if(songs !=null){
-            for (File file:songs){
+        if (songs != null) {
+            for (File file : songs) {
                 songList.add(new Media(file.toURI().toString()));
             }
         }
@@ -41,35 +41,33 @@ public class MainWindowController {
         if (songList.isEmpty()) {
             return;  // No need to proceed if there are no songs
         }
-        playNextSong();
 
         System.out.println("Number of songs in the playlist: " + songList.size());
         //volume
         setVolumeSlider();
-
-
     }
 
 
-    private void playNextSong(){
+    private void playNextSong() {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.dispose();
+        }
+
         if (songIndex < songList.size()) {
-            if (mediaPlayer != null) {
-                mediaPlayer.stop();
-            }
             mediaPlayer = new MediaPlayer(songList.get(songIndex));
 
             // Set up the end of media handler
             mediaPlayer.setOnEndOfMedia(() -> {
-                if (mediaPlayer != null && mediaPlayer.getCurrentTime().equals(mediaPlayer.getTotalDuration())) {
-                    songIndex++;
-                    playNextSong();
-                    mediaPlayer.setAutoPlay(true);
-                }
+                songIndex++;
+                playNextSong();
             });
 
             mediaView.setMediaPlayer(mediaPlayer);
             setSongProgress();
             setVolumeSlider();
+
+            mediaPlayer.play();
         } else {
             // All songs have been played, loop back to the first song
             songIndex = 0;
@@ -78,6 +76,7 @@ public class MainWindowController {
     }
 
     public void clickPlayBtn(ActionEvent actionEvent) {
+        playNextSong();
         setSongProgress();
         if (mediaPlayer == null) {
             // Initialize MediaPlayer and play the first song
@@ -100,20 +99,20 @@ public class MainWindowController {
     }
 
     public void clickNextSong(ActionEvent actionEvent) {
-        if (songIndex<songList.size()){
+        if (songIndex < songList.size()) {
             songIndex++;
             playNextSong();
         }
     }
 
     public void clickPreviousSong(ActionEvent actionEvent) {
-        if (songIndex>0){
+        if (songIndex > 0) {
             songIndex--;
             playNextSong();
         }
     }
 
-    public void setSongProgress(){
+    public void setSongProgress() {
         // Set up the progress slider for the new song
         songProgress.setValue(0);
         songProgress.valueChangingProperty().setValue(null);
@@ -135,12 +134,14 @@ public class MainWindowController {
         });
     }
 
-    public void setVolumeSlider(){
-        volumeSlider.setValue(mediaPlayer.getVolume() * 50); // set initial value
-        volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            mediaPlayer.setVolume(newValue.doubleValue() / 100.0);
-        });
+    public void setVolumeSlider() {
+        if (mediaPlayer != null) {
+            volumeSlider.setValue(mediaPlayer.getVolume() * 50); // set initial value
+
+            volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+                mediaPlayer.setVolume(newValue.doubleValue() / 100.0);
+            });
+        }
+
     }
-
-
 }
