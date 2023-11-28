@@ -7,6 +7,8 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.util.Duration;
 
+import java.io.File;
+
 public class MainWindowController {
     @FXML
     public Slider volumeSlider;
@@ -17,7 +19,8 @@ public class MainWindowController {
     private MediaPlayer mediaPlayer;
 
     public void initialize(){
-        Media media = new Media(getClass().getResource("Undertale OST_ 068 - Death by Glamour.mp3").toExternalForm());
+        String filePath = "C:\\Users\\aaron\\Music\\Mytunes\\Sparkle.mp3";
+        Media media = new Media(new File(filePath).toURI().toString());
         mediaPlayer = new MediaPlayer(media);
         mediaView.setMediaPlayer(mediaPlayer);
 
