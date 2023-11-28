@@ -30,6 +30,7 @@ public class MainWindowController {
     private List<Media> songList = new ArrayList<>();
     private int songIndex = 0;
     private double currentVolume = 0.5; // Set a default volume (0.5 represents 50% volume)
+    private boolean canPlaySong = false;
 
 
 
@@ -79,7 +80,7 @@ public class MainWindowController {
             setSongProgress();
             setVolumeSlider();
 
-            mediaPlayer.play();
+            playCurrentSong();
             updateTimeLabel();
         } else {
             // All songs have been played, loop back to the first song
@@ -89,7 +90,7 @@ public class MainWindowController {
     }
 
     public void clickPlayBtn(ActionEvent actionEvent) {
-
+        canPlaySong =true;
         setSongProgress();
         if (mediaPlayer == null) {
             // Initialize MediaPlayer
@@ -98,7 +99,7 @@ public class MainWindowController {
                 mediaView.setMediaPlayer(mediaPlayer);
                 setVolumeSlider();  // Initialize volume slider
                 playBtn.setText("Pause");
-                mediaPlayer.play();
+                playCurrentSong();
             }
         } else {
             // Toggle between play and pause
@@ -106,7 +107,7 @@ public class MainWindowController {
                 mediaPlayer.pause();
                 playBtn.setText("Play");
             } else {
-                mediaPlayer.play();
+                playCurrentSong();
                 playBtn.setText("Pause");
             }
         }
@@ -171,5 +172,11 @@ public class MainWindowController {
         int minutes = (int) duration.toMinutes();
         int seconds = (int) (duration.toSeconds() % 60);
         return String.format("%d:%02d", minutes, seconds);
+    }
+
+    private void playCurrentSong(){
+        if (canPlaySong==true){
+            mediaPlayer.play();
+        }
     }
 }
