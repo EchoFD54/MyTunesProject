@@ -15,6 +15,8 @@ public class MainWindowController {
     @FXML
     public Button playBtn;
     @FXML
+    public Slider songProgress;
+    @FXML
     private MediaView mediaView;
     private MediaPlayer mediaPlayer;
 
@@ -22,13 +24,16 @@ public class MainWindowController {
         String filePath = "C:\\Users\\aaron\\Music\\Mytunes\\Sparkle.mp3";
         Media media = new Media(new File(filePath).toURI().toString());
         mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setAutoPlay(false);
         mediaView.setMediaPlayer(mediaPlayer);
 
-        volumeSlider.setValue(mediaPlayer.getVolume() * 100); // set initial value
+        //volume
+        volumeSlider.setValue(mediaPlayer.getVolume() * 50); // set initial value
         volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
             mediaPlayer.setVolume(newValue.doubleValue() / 100.0);
         });
 
+        //play Button
         playBtn.setOnAction(event -> {
             if(mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING){
                 mediaPlayer.pause();
@@ -39,13 +44,30 @@ public class MainWindowController {
             }
         });
 
+        //Reset song
         mediaPlayer.setOnEndOfMedia(() -> {
             mediaPlayer.seek(Duration.ZERO);
             playBtn.setText("Play");
     });
-    }
+
+        //set the song progress
+        songProgress.valueChangingProperty().addListener((observable, oldValue, isChanging) -> {
+            if (!isChanging) {
+                double duration = mediaPlayer.getTotalDuration().toMillis();
+                double currentTime = songProgress.getValue() * duration / 100.0;
+                mediaPlayer.seek(new Duration(currentTime));
+            }
+        });
+
+        // Update the song progress as the media plays
+        mediaPlayer.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
+            if (!songProgress.isValueChanging()) {
+                double progress = (newValue.toMillis() / mediaPlayer.getTotalDuration().toMillis()) * 100.0;
+                songProgress.setValue(progress);
+            }
+        });
 
 
-    public void clickPlay(ActionEvent actionEvent) {
     }
+
 }
