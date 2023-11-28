@@ -26,6 +26,7 @@ public class MainWindowController {
     private MediaPlayer mediaPlayer;
     private List<Media> songList = new ArrayList<>();
     private int songIndex = 0;
+    private double currentVolume = 0.5; // Set a default volume (0.5 represents 50% volume)
 
 
     public void initialize() {
@@ -43,8 +44,6 @@ public class MainWindowController {
         }
 
         System.out.println("Number of songs in the playlist: " + songList.size());
-        //volume
-        setVolumeSlider();
     }
 
 
@@ -55,7 +54,14 @@ public class MainWindowController {
         }
 
         if (songIndex < songList.size()) {
-            mediaPlayer = new MediaPlayer(songList.get(songIndex));
+            MediaPlayer newMediaPlayer = new MediaPlayer(songList.get(songIndex));
+
+            // Set the volume to the value from the previous MediaPlayer
+            if (mediaPlayer != null) {
+                newMediaPlayer.setVolume(mediaPlayer.getVolume());
+            }
+
+            mediaPlayer = newMediaPlayer;
 
             // Set up the end of media handler
             mediaPlayer.setOnEndOfMedia(() -> {
@@ -79,10 +85,11 @@ public class MainWindowController {
         playNextSong();
         setSongProgress();
         if (mediaPlayer == null) {
-            // Initialize MediaPlayer and play the first song
+            // Initialize MediaPlayer
             if (!songList.isEmpty()) {
                 mediaPlayer = new MediaPlayer(songList.get(0));
                 mediaView.setMediaPlayer(mediaPlayer);
+                setVolumeSlider();  // Initialize volume slider
                 playBtn.setText("Pause");
                 mediaPlayer.play();
             }
@@ -136,12 +143,12 @@ public class MainWindowController {
 
     public void setVolumeSlider() {
         if (mediaPlayer != null) {
-            volumeSlider.setValue(mediaPlayer.getVolume() * 50); // set initial value
+            volumeSlider.setValue(mediaPlayer.getVolume() * 100); // set initial value
 
             volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-                mediaPlayer.setVolume(newValue.doubleValue() / 100.0);
+                currentVolume = newValue.doubleValue() / 100.0;
+                mediaPlayer.setVolume(currentVolume);
             });
         }
-
     }
 }
