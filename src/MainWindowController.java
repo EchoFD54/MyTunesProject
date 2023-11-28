@@ -1,6 +1,7 @@
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -22,11 +23,14 @@ public class MainWindowController {
     @FXML
     public Button previousBtn;
     @FXML
+    public Label timerLabel;
+    @FXML
     private MediaView mediaView;
     private MediaPlayer mediaPlayer;
     private List<Media> songList = new ArrayList<>();
     private int songIndex = 0;
     private double currentVolume = 0.5; // Set a default volume (0.5 represents 50% volume)
+
 
 
     public void initialize() {
@@ -43,6 +47,8 @@ public class MainWindowController {
             return;  // No need to proceed if there are no songs
         }
 
+        timerLabel.setText("0:00");
+        playNextSong();
         System.out.println("Number of songs in the playlist: " + songList.size());
     }
 
@@ -74,6 +80,7 @@ public class MainWindowController {
             setVolumeSlider();
 
             mediaPlayer.play();
+            updateTimeLabel();
         } else {
             // All songs have been played, loop back to the first song
             songIndex = 0;
@@ -82,7 +89,7 @@ public class MainWindowController {
     }
 
     public void clickPlayBtn(ActionEvent actionEvent) {
-        playNextSong();
+
         setSongProgress();
         if (mediaPlayer == null) {
             // Initialize MediaPlayer
@@ -150,5 +157,19 @@ public class MainWindowController {
                 mediaPlayer.setVolume(currentVolume);
             });
         }
+    }
+
+    private void updateTimeLabel() {
+        mediaPlayer.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
+            Duration currentTime = mediaPlayer.getCurrentTime();
+            String formattedTime = formatDuration(currentTime);
+            timerLabel.setText(formattedTime);
+        });
+    }
+
+    private String formatDuration(Duration duration) {
+        int minutes = (int) duration.toMinutes();
+        int seconds = (int) (duration.toSeconds() % 60);
+        return String.format("%d:%02d", minutes, seconds);
     }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.media.MediaView?>
@@ -13,5 +14,6 @@
       <Slider fx:id="songProgress" layoutX="24.0" layoutY="54.0" prefHeight="18.0" prefWidth="559.0" />
       <Button fx:id="nextBtn" layoutX="400.0" layoutY="300.0" mnemonicParsing="false" onAction="#clickNextSong" text="Next" />
       <Button fx:id="previousBtn" layoutX="135.0" layoutY="300.0" mnemonicParsing="false" onAction="#clickPreviousSong" text="Previous" />
+      <Label fx:id="timerLabel" layoutX="24.0" layoutY="25.0" text="Label" />
    </children>
 </AnchorPane>
