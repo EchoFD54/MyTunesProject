@@ -45,7 +45,7 @@ public class MainWindowController {
         }
 
         if (songList.isEmpty()) {
-            return;  
+            return;
         }
 
         timerLabel.setText("0:00");
@@ -151,7 +151,7 @@ public class MainWindowController {
 
     public void setVolumeSlider() {
         if (mediaPlayer != null) {
-            volumeSlider.setValue(mediaPlayer.getVolume() * 100); // set initial value
+            volumeSlider.setValue(mediaPlayer.getVolume() * 100);
 
             volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
                 currentVolume = newValue.doubleValue() / 100.0;
