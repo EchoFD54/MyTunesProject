@@ -6,8 +6,12 @@ import javafx.scene.control.Slider;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +28,10 @@ public class MainWindowController {
     public Button previousBtn;
     @FXML
     public Label timerLabel;
+    @FXML
+    public TextFlow songTextFlow;
+    @FXML
+    public Label songLabel;
     @FXML
     private MediaView mediaView;
     private MediaPlayer mediaPlayer;
@@ -82,6 +90,20 @@ public class MainWindowController {
 
             playCurrentSong();
             updateTimeLabel();
+
+            try {
+                String decodedName = URLDecoder.decode(new File(songList.get(songIndex).getSource()).getName(), "UTF-8");
+
+                Text songText = new Text(decodedName);
+                songText.setStyle("-fx-font-size: 40.0;"); // Set the initial font size
+
+                songTextFlow.getChildren().clear();
+                songTextFlow.getChildren().add(songText);
+
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
         } else {
             // All songs have been played, loop back to the first song
             songIndex = 0;

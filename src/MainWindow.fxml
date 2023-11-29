@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.media.MediaView?>
+<?import javafx.scene.text.TextFlow?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainWindowController">
    <children>
@@ -15,5 +16,6 @@
       <Button fx:id="nextBtn" layoutX="400.0" layoutY="300.0" mnemonicParsing="false" onAction="#clickNextSong" text="Next" />
       <Button fx:id="previousBtn" layoutX="135.0" layoutY="300.0" mnemonicParsing="false" onAction="#clickPreviousSong" text="Previous" />
       <Label fx:id="timerLabel" layoutX="24.0" layoutY="25.0" text="Label" />
+      <TextFlow fx:id="songTextFlow" layoutX="35.0" layoutY="72.0" prefHeight="200.0" prefWidth="547.0" />
    </children>
 </AnchorPane>
