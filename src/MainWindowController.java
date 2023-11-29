@@ -45,7 +45,7 @@ public class MainWindowController {
         }
 
         if (songList.isEmpty()) {
-            return;  // No need to proceed if there are no songs
+            return;  
         }
 
         timerLabel.setText("0:00");
