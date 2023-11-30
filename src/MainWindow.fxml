@@ -2,20 +2,23 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.media.MediaView?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainWindowController">
+<AnchorPane prefHeight="528.0" prefWidth="780.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainWindowController">
    <children>
-      <Slider fx:id="volumeSlider" layoutX="230.0" layoutY="342.0" />
-      <MediaView fx:id="mediaView" fitHeight="200.0" fitWidth="200.0" layoutX="200.0" layoutY="92.0" />
-      <Button fx:id="playBtn" layoutX="277.0" layoutY="300.0" mnemonicParsing="false" onAction="#clickPlayBtn" text="Play" />
-      <Slider fx:id="songProgress" layoutX="24.0" layoutY="54.0" prefHeight="18.0" prefWidth="559.0" />
-      <Button fx:id="nextBtn" layoutX="400.0" layoutY="300.0" mnemonicParsing="false" onAction="#clickNextSong" text="Next" />
-      <Button fx:id="previousBtn" layoutX="135.0" layoutY="300.0" mnemonicParsing="false" onAction="#clickPreviousSong" text="Previous" />
-      <Label fx:id="timerLabel" layoutX="24.0" layoutY="25.0" text="Label" />
-      <TextFlow fx:id="songTextFlow" layoutX="35.0" layoutY="72.0" prefHeight="200.0" prefWidth="547.0" />
+      <Slider fx:id="volumeSlider" layoutX="417.0" layoutY="382.0" />
+      <MediaView fx:id="mediaView" fitHeight="200.0" fitWidth="200.0" layoutY="359.0" />
+      <Button fx:id="playBtn" layoutX="470.0" layoutY="344.0" mnemonicParsing="false" onAction="#clickPlayBtn" text="Play" />
+      <Slider fx:id="songProgress" layoutX="207.0" layoutY="53.0" prefHeight="18.0" prefWidth="559.0" />
+      <Button fx:id="nextBtn" layoutX="593.0" layoutY="344.0" mnemonicParsing="false" onAction="#clickNextSong" text="Next" />
+      <Button fx:id="previousBtn" layoutX="328.0" layoutY="344.0" mnemonicParsing="false" onAction="#clickPreviousSong" text="Previous" />
+      <Label fx:id="timerLabel" layoutX="207.0" layoutY="24.0" text="Label" />
+      <TextFlow fx:id="songTextFlow" layoutX="214.0" layoutY="409.0" prefHeight="100.0" prefWidth="559.0" />
+      <ListView fx:id="songListView" layoutX="208.0" layoutY="126.0" prefHeight="200.0" prefWidth="559.0" />
+      <Button fx:id="addSongsBtn" layoutX="443.0" layoutY="82.0" mnemonicParsing="false" text="New song" />
    </children>
 </AnchorPane>

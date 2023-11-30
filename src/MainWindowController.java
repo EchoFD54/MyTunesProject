@@ -1,7 +1,10 @@
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -14,6 +17,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.stage.FileChooser;
 
 public class MainWindowController {
     @FXML
@@ -32,6 +36,8 @@ public class MainWindowController {
     public TextFlow songTextFlow;
     @FXML
     public Label songLabel;
+    @FXML
+    private ListView<String> songListView;
     @FXML
     private MediaView mediaView;
     private MediaPlayer mediaPlayer;
@@ -59,6 +65,27 @@ public class MainWindowController {
         timerLabel.setText("0:00");
         playNextSong();
         System.out.println("Number of songs in the playlist: " + songList.size());
+
+        // Populate the ListView with song names
+        ObservableList<String> songNames = FXCollections.observableArrayList();
+        for (Media media : songList) {
+            try {
+                String decodedName = URLDecoder.decode(new File(media.getSource()).getName(), "UTF-8");
+                songNames.add(decodedName);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+        songListView.setItems(songNames);
+
+        // Set a listener for handling song selection
+        songListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            int selectedSongIndex = songListView.getSelectionModel().getSelectedIndex();
+            if (selectedSongIndex >= 0) {
+                songIndex = selectedSongIndex;
+                playNextSong();
+            }
+        });
     }
 
 
