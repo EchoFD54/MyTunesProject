@@ -70,6 +70,7 @@ public class MainWindowController {
         timerLabel.setText("0:00");
         playNextSong();
         System.out.println("Number of songs in the playlist: " + songList.size());
+        System.out.println("My Change");
 
 
 
