@@ -19,6 +19,10 @@
       <Label fx:id="timerLabel" layoutX="207.0" layoutY="24.0" text="Label" />
       <TextFlow fx:id="songTextFlow" layoutX="214.0" layoutY="409.0" prefHeight="100.0" prefWidth="559.0" />
       <ListView fx:id="songListView" layoutX="208.0" layoutY="126.0" prefHeight="200.0" prefWidth="559.0" />
-      <Button fx:id="addSongsBtn" layoutX="443.0" layoutY="82.0" mnemonicParsing="false" text="New song" />
+      <Button fx:id="addSongsBtn" layoutX="214.0" layoutY="85.0" mnemonicParsing="false" onAction="#clickAddSongsBtn" text="Add song" />
+      <ListView fx:id="playlistList" layoutX="14.0" layoutY="45.0" prefHeight="494.0" prefWidth="172.0" />
+      <Label layoutX="69.0" layoutY="14.0" prefHeight="21.0" prefWidth="63.0" text="Playlists" />
+      <Button layoutX="324.0" layoutY="85.0" mnemonicParsing="false" text="Edit Song" />
+      <Button layoutX="431.0" layoutY="85.0" mnemonicParsing="false" text="Delete Song" />
    </children>
 </AnchorPane>

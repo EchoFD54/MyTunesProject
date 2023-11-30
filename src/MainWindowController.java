@@ -11,13 +11,14 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.stage.FileChooser;
 
 public class MainWindowController {
     @FXML
@@ -34,8 +35,9 @@ public class MainWindowController {
     public Label timerLabel;
     @FXML
     public TextFlow songTextFlow;
+    public ListView playlistList;
     @FXML
-    public Label songLabel;
+    public Button addSongsBtn;
     @FXML
     private ListView<String> songListView;
     @FXML
@@ -49,14 +51,17 @@ public class MainWindowController {
 
 
     public void initialize() {
-        File folder = new File("C:\\Users\\aaron\\Music\\Mytunes");
-        File[] songs = folder.listFiles(((dir, name) -> name.endsWith(".mp3")));
-
-        if (songs != null) {
-            for (File file : songs) {
-                songList.add(new Media(file.toURI().toString()));
+        // Set a listener for handling song selection
+        songListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            int selectedSongIndex = songListView.getSelectionModel().getSelectedIndex();
+            if (selectedSongIndex >= 0) {
+                songIndex = selectedSongIndex;
+                playNextSong();
             }
-        }
+        });
+
+        // Set the event handler for the addSongsBtn button
+        addSongsBtn.setOnAction(this::clickAddSongsBtn);
 
         if (songList.isEmpty()) {
             return;
@@ -66,26 +71,9 @@ public class MainWindowController {
         playNextSong();
         System.out.println("Number of songs in the playlist: " + songList.size());
 
-        // Populate the ListView with song names
-        ObservableList<String> songNames = FXCollections.observableArrayList();
-        for (Media media : songList) {
-            try {
-                String decodedName = URLDecoder.decode(new File(media.getSource()).getName(), "UTF-8");
-                songNames.add(decodedName);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-        }
-        songListView.setItems(songNames);
 
-        // Set a listener for handling song selection
-        songListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            int selectedSongIndex = songListView.getSelectionModel().getSelectedIndex();
-            if (selectedSongIndex >= 0) {
-                songIndex = selectedSongIndex;
-                playNextSong();
-            }
-        });
+
+
     }
 
 
@@ -182,6 +170,7 @@ public class MainWindowController {
         songProgress.valueChangingProperty().setValue(null);
         songProgress.valueChangingProperty().addListener((observable, oldValue, isChanging) -> {
             if (!isChanging) {
+                playBtn.setText("Play");
                 double duration = mediaPlayer.getTotalDuration().toMillis();
                 double currentTime = songProgress.getValue() * duration / 100.0;
                 mediaPlayer.seek(new Duration(currentTime));
@@ -192,6 +181,7 @@ public class MainWindowController {
         songProgress.valueChangingProperty().setValue(null);
         mediaPlayer.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
             if (!songProgress.isValueChanging()) {
+                playBtn.setText("Pause");
                 double progress = (newValue.toMillis() / mediaPlayer.getTotalDuration().toMillis()) * 100.0;
                 songProgress.setValue(progress);
             }
@@ -226,6 +216,35 @@ public class MainWindowController {
     private void playCurrentSong(){
         if (canPlaySong){
             mediaPlayer.play();
+        }
+    }
+
+    @FXML
+    public void clickAddSongsBtn(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select Songs");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("MP3 Files", "*.mp3"));
+        List<File> selectedFiles = fileChooser.showOpenMultipleDialog(new Stage());
+
+        if (selectedFiles != null) {
+            for (File file : selectedFiles) {
+                Media newMedia = new Media(file.toURI().toString());
+                songList.add(newMedia);
+
+                try {
+                    String decodedName = URLDecoder.decode(file.getName(), "UTF-8");
+                    ObservableList<String> songNames = songListView.getItems();
+                    songNames.add(decodedName);
+                    songListView.setItems(songNames);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            // If no song is currently playing, start playing the first song
+            if (mediaPlayer == null) {
+                playNextSong();
+            }
         }
     }
 }
