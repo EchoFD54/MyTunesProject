@@ -10,30 +10,31 @@
 <?import javafx.scene.media.MediaView?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane prefHeight="559.0" prefWidth="783.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainWindowController">
+<AnchorPane prefHeight="637.0" prefWidth="783.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainWindowController">
    <children>
-      <Slider fx:id="volumeSlider" layoutX="417.0" layoutY="382.0" />
-      <MediaView fx:id="mediaView" fitHeight="200.0" fitWidth="200.0" layoutY="359.0" />
-      <Button fx:id="playBtn" layoutX="470.0" layoutY="344.0" mnemonicParsing="false" onAction="#clickPlayBtn" text="Play" />
-      <Slider fx:id="songProgress" layoutX="207.0" layoutY="53.0" prefHeight="18.0" prefWidth="559.0" />
-      <Button fx:id="nextBtn" layoutX="593.0" layoutY="344.0" mnemonicParsing="false" onAction="#clickNextSong" text="Next" />
-      <Button fx:id="previousBtn" layoutX="328.0" layoutY="344.0" mnemonicParsing="false" onAction="#clickPreviousSong" text="Previous" />
-      <Label fx:id="timerLabel" layoutX="207.0" layoutY="24.0" text="Label" />
-      <TextFlow fx:id="songTextFlow" layoutX="214.0" layoutY="409.0" prefHeight="100.0" prefWidth="559.0" />
-      <ListView fx:id="songListView" layoutX="208.0" layoutY="126.0" prefHeight="200.0" prefWidth="559.0" />
-      <Button fx:id="addSongsBtn" layoutX="214.0" layoutY="85.0" mnemonicParsing="false" onAction="#clickAddSongsBtn" text="Add song" />
-      <ListView fx:id="playlistList" layoutX="14.0" layoutY="84.0" prefHeight="455.0" prefWidth="172.0" />
-      <Label layoutX="69.0" layoutY="14.0" prefHeight="21.0" prefWidth="63.0" text="Playlists" />
-      <Button layoutX="324.0" layoutY="85.0" mnemonicParsing="false" text="Edit Song" />
-      <Button layoutX="431.0" layoutY="85.0" mnemonicParsing="false" text="Delete Song" />
-      <MenuButton layoutX="678.0" layoutY="85.0" mnemonicParsing="false" text="Sort By">
+      <Slider fx:id="volumeSlider" layoutX="422.0" layoutY="454.0" />
+      <MediaView fx:id="mediaView" fitHeight="200.0" fitWidth="200.0" layoutX="5.0" layoutY="431.0" />
+      <Button fx:id="playBtn" layoutX="475.0" layoutY="416.0" mnemonicParsing="false" onAction="#clickPlayBtn" text="Play" />
+      <Slider fx:id="songProgress" layoutX="213.0" layoutY="88.0" prefHeight="18.0" prefWidth="559.0" />
+      <Button fx:id="nextBtn" layoutX="598.0" layoutY="416.0" mnemonicParsing="false" onAction="#clickNextSong" text="Next" />
+      <Button fx:id="previousBtn" layoutX="333.0" layoutY="416.0" mnemonicParsing="false" onAction="#clickPreviousSong" text="Previous" />
+      <Label fx:id="timerLabel" layoutX="213.0" layoutY="54.0" text="Label" />
+      <TextFlow fx:id="songTextFlow" layoutX="219.0" layoutY="481.0" prefHeight="100.0" prefWidth="559.0" />
+      <ListView fx:id="songListView" layoutX="213.0" layoutY="198.0" prefHeight="200.0" prefWidth="559.0" />
+      <Button fx:id="addSongsBtn" layoutX="219.0" layoutY="157.0" mnemonicParsing="false" onAction="#clickAddSongsBtn" text="Add song to library" />
+      <ListView fx:id="playlistList" layoutX="19.0" layoutY="156.0" prefHeight="455.0" prefWidth="172.0" />
+      <Label layoutX="81.0" layoutY="96.0" prefHeight="21.0" prefWidth="65.0" text="Playlists" />
+      <Button layoutX="380.0" layoutY="157.0" mnemonicParsing="false" text="Edit Song" />
+      <Button layoutX="477.0" layoutY="157.0" mnemonicParsing="false" text="Delete Song" />
+      <MenuButton layoutX="683.0" layoutY="157.0" mnemonicParsing="false" text="Sort By">
         <items>
           <MenuItem mnemonicParsing="false" text="Action 1" />
           <MenuItem mnemonicParsing="false" text="Action 2" />
         </items>
       </MenuButton>
-      <Button layoutX="645.0" layoutY="509.0" mnemonicParsing="false" text="Add to Playlist" />
-      <Button layoutX="14.0" layoutY="47.0" mnemonicParsing="false" text="New" />
-      <Button layoutX="140.0" layoutY="47.0" mnemonicParsing="false" text="Edit" />
+      <Button layoutX="650.0" layoutY="581.0" mnemonicParsing="false" text="Add to Playlist" />
+      <Button layoutX="19.0" layoutY="119.0" mnemonicParsing="false" text="New" />
+      <Button layoutX="145.0" layoutY="119.0" mnemonicParsing="false" text="Edit" />
+      <Button layoutX="52.0" layoutY="23.0" mnemonicParsing="false" text="Go to Library" />
    </children>
 </AnchorPane>

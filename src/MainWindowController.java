@@ -45,7 +45,7 @@ public class MainWindowController {
     private MediaPlayer mediaPlayer;
     private List<Media> songList = new ArrayList<>();
     private int songIndex = 0;
-    private double currentVolume = 0.5; // Set a default volume (0.5 represents 50% volume)
+    private double currentVolume = 0.5;
     private boolean canPlaySong = false;
 
 
@@ -110,7 +110,7 @@ public class MainWindowController {
                 String decodedName = URLDecoder.decode(new File(songList.get(songIndex).getSource()).getName(), "UTF-8");
 
                 Text songText = new Text(decodedName);
-                songText.setStyle("-fx-font-size: 40.0;"); // Set the initial font size
+                songText.setStyle("-fx-font-size: 40.0;"); // Set the font size
 
                 songTextFlow.getChildren().clear();
                 songTextFlow.getChildren().add(songText);
@@ -241,7 +241,6 @@ public class MainWindowController {
                 }
             }
 
-            // If no song is currently playing, start playing the first song
             if (mediaPlayer == null) {
                 playNextSong();
             }
