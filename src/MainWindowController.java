@@ -2,10 +2,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
@@ -39,6 +36,16 @@ public class MainWindowController {
     @FXML
     public Button addSongsBtn;
     @FXML
+    public TableView<Song> songTableView;
+    @FXML
+    public TableColumn titleColumn;
+    @FXML
+    public TableColumn artistColumn;
+    @FXML
+    public TableColumn genreColumn;
+    @FXML
+    public TableColumn timeColumn;
+    @FXML
     private ListView<String> songListView;
     @FXML
     private MediaView mediaView;
@@ -51,9 +58,21 @@ public class MainWindowController {
 
 
     public void initialize() {
+        // Set up the columns in the TableView
+        TableColumn<Song, String> nameColumn = (TableColumn<Song, String>) songTableView.getColumns().get(0);
+        TableColumn<Song, String> artistColumn = (TableColumn<Song, String>) songTableView.getColumns().get(1);
+        TableColumn<Song, String> genreColumn = (TableColumn<Song, String>) songTableView.getColumns().get(2);
+        TableColumn<Song, String> timeColumn = (TableColumn<Song, String>) songTableView.getColumns().get(3);
+
+        // Define cell value factories for each column
+        nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+        artistColumn.setCellValueFactory(cellData -> cellData.getValue().artistProperty());
+        genreColumn.setCellValueFactory(cellData -> cellData.getValue().genreProperty());
+        timeColumn.setCellValueFactory(cellData -> cellData.getValue().timeProperty());
+
         // Set a listener for handling song selection
-        songListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            int selectedSongIndex = songListView.getSelectionModel().getSelectedIndex();
+        songTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            int selectedSongIndex = songTableView.getSelectionModel().getSelectedIndex();
             if (selectedSongIndex >= 0) {
                 songIndex = selectedSongIndex;
                 playNextSong();
@@ -229,17 +248,11 @@ public class MainWindowController {
 
         if (selectedFiles != null) {
             for (File file : selectedFiles) {
-                Media newMedia = new Media(file.toURI().toString());
-                songList.add(newMedia);
+                Song newSong = createSongFromMediaFile(file);
+                songList.add(new Media(file.toURI().toString()));
 
-                try {
-                    String decodedName = URLDecoder.decode(file.getName(), "UTF-8");
-                    ObservableList<String> songNames = songListView.getItems();
-                    songNames.add(decodedName);
-                    songListView.setItems(songNames);
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
+                // Add the newSong to the TableView
+                songTableView.getItems().add(newSong);
             }
 
             if (mediaPlayer == null) {
@@ -247,4 +260,10 @@ public class MainWindowController {
             }
         }
     }
+
+    private Song createSongFromMediaFile(File file){
+        return new Song(file.getName(), "Unknown Artist", "Unknown Genre", "0:00");
+    }
+
+
 }

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+
+<AnchorPane prefHeight="342.0" prefWidth="401.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AddSongWindowController">
+    <Label layoutX="24.0" layoutY="14.0" text="Add Song" />
+    <HBox />
+    <HBox />
+    <HBox />
+    <HBox />
+    <Button layoutX="130.0" layoutY="275.0" onAction="#addSong" text="Add Song" />
+     <Button layoutX="105.0" layoutY="207.0" onAction="#browseFile" text="Browse" />
+     <TextField fx:id="fileField" editable="false" layoutX="191.0" layoutY="207.0" />
+     <TextField fx:id="genreField" layoutX="97.0" layoutY="136.0" />
+     <TextField fx:id="artistField" layoutX="97.0" layoutY="95.0" />
+     <TextField fx:id="titleField" layoutX="97.0" layoutY="50.0" />
+     <Label layoutX="24.0" layoutY="212.0" text="Select File" />
+     <Label layoutX="37.0" layoutY="141.0" text="Genre" />
+     <Label layoutX="37.0" layoutY="55.0" text="Name" />
+     <Label layoutX="39.0" layoutY="100.0" text="Artist" />
+
+</AnchorPane>

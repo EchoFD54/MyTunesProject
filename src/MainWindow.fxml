@@ -6,6 +6,8 @@
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.media.MediaView?>
 <?import javafx.scene.text.TextFlow?>
@@ -36,5 +38,13 @@
       <Button layoutX="19.0" layoutY="119.0" mnemonicParsing="false" text="New" />
       <Button layoutX="145.0" layoutY="119.0" mnemonicParsing="false" text="Edit" />
       <Button layoutX="52.0" layoutY="23.0" mnemonicParsing="false" text="Go to Library" />
+      <TableView fx:id="songTableView" layoutX="213.0" layoutY="198.0" prefHeight="200.0" prefWidth="559.0">
+        <columns>
+          <TableColumn fx:id="titleColumn" prefWidth="274.0" text="Title" />
+          <TableColumn fx:id="artistColumn" prefWidth="137.0" text="Artist" />
+            <TableColumn fx:id="genreColumn" prefWidth="86.0" text="Genre" />
+            <TableColumn fx:id="timeColumn" prefWidth="60.0" text="Time" />
+        </columns>
+      </TableView>
    </children>
 </AnchorPane>
