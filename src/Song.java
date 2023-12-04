@@ -2,20 +2,20 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class Song {
-    private StringProperty name;
+    private StringProperty title;
     private StringProperty artist;
     private StringProperty genre;
     private StringProperty time;
 
-    public Song(String name, String artist, String genre, String time) {
-        this.name = new SimpleStringProperty(name);
+    public Song(String title, String artist, String genre, String time) {
+        this.title = new SimpleStringProperty(title);
         this.artist = new SimpleStringProperty(artist);
         this.genre = new SimpleStringProperty(genre);
         this.time = new SimpleStringProperty(time);
     }
 
-    public StringProperty nameProperty() {
-        return name;
+    public StringProperty titleProperty() {
+        return title;
     }
 
     public StringProperty artistProperty() {
@@ -30,8 +30,8 @@ public class Song {
         return time;
     }
 
-    public void setName(String name) {
-        this.name.set(name);
+    public void setTitle(String title) {
+        this.title.set(title);
     }
 
     public void setArtist(String artist) {

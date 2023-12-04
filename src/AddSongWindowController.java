@@ -1,15 +1,43 @@
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.File;
 
 public class AddSongWindowController {
     public TextField fileField;
     public TextField genreField;
     public TextField artistField;
     public TextField titleField;
+    private MainWindowController mainWindowController;
 
     public void addSong(ActionEvent actionEvent) {
+        // Retrieve the song properties from the text fields
+        String title = titleField.getText();
+        String artist = artistField.getText();
+        String genre = genreField.getText();
+        String filePath = fileField.getText();
+
+        // Update the song properties in the MainWindowController
+        mainWindowController.updateSongProperties(title, artist, genre, filePath);
+
+        // Close the AddSongWindow
+        ((Stage) titleField.getScene().getWindow()).close();
     }
 
     public void browseFile(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose Audio File");
+        File selectedFile = fileChooser.showOpenDialog(null);
+
+        if (selectedFile != null) {
+            // Set the selected file path to the fileField
+            fileField.setText(selectedFile.getAbsolutePath());
+        }
+    }
+
+    public void setMainWindowController(MainWindowController mainWindowController) {
+        this.mainWindowController = mainWindowController;
     }
 }

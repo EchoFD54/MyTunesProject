@@ -1,17 +1,18 @@
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -54,18 +55,18 @@ public class MainWindowController {
     private int songIndex = 0;
     private double currentVolume = 0.5;
     private boolean canPlaySong = false;
-
+    private String currentSongName = "";
 
 
     public void initialize() {
         // Set up the columns in the TableView
-        TableColumn<Song, String> nameColumn = (TableColumn<Song, String>) songTableView.getColumns().get(0);
+        TableColumn<Song, String> titleColumn = (TableColumn<Song, String>) songTableView.getColumns().get(0);
         TableColumn<Song, String> artistColumn = (TableColumn<Song, String>) songTableView.getColumns().get(1);
         TableColumn<Song, String> genreColumn = (TableColumn<Song, String>) songTableView.getColumns().get(2);
         TableColumn<Song, String> timeColumn = (TableColumn<Song, String>) songTableView.getColumns().get(3);
 
         // Define cell value factories for each column
-        nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+        titleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
         artistColumn.setCellValueFactory(cellData -> cellData.getValue().artistProperty());
         genreColumn.setCellValueFactory(cellData -> cellData.getValue().genreProperty());
         timeColumn.setCellValueFactory(cellData -> cellData.getValue().timeProperty());
@@ -90,8 +91,6 @@ public class MainWindowController {
         playNextSong();
         System.out.println("Number of songs in the playlist: " + songList.size());
         System.out.println("My Change");
-
-
 
 
     }
@@ -126,18 +125,10 @@ public class MainWindowController {
             playCurrentSong();
             updateTimeLabel();
 
-            try {
-                String decodedName = URLDecoder.decode(new File(songList.get(songIndex).getSource()).getName(), "UTF-8");
+            // Update the TextFlow with the current song name
+            updateTextFlow();
 
-                Text songText = new Text(decodedName);
-                songText.setStyle("-fx-font-size: 40.0;"); // Set the font size
 
-                songTextFlow.getChildren().clear();
-                songTextFlow.getChildren().add(songText);
-
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
 
         } else {
             // All songs have been played, loop back to the first song
@@ -147,7 +138,7 @@ public class MainWindowController {
     }
 
     public void clickPlayBtn(ActionEvent actionEvent) {
-        canPlaySong =true;
+        canPlaySong = true;
         setSongProgress();
         if (mediaPlayer == null) {
             // Initialize MediaPlayer
@@ -233,37 +224,69 @@ public class MainWindowController {
         return String.format("%d:%02d", minutes, seconds);
     }
 
-    private void playCurrentSong(){
-        if (canPlaySong){
+    private void playCurrentSong() {
+        if (canPlaySong) {
             mediaPlayer.play();
         }
     }
 
     @FXML
     public void clickAddSongsBtn(ActionEvent actionEvent) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Select Songs");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("MP3 Files", "*.mp3"));
-        List<File> selectedFiles = fileChooser.showOpenMultipleDialog(new Stage());
+        // Open the AddSongWindowController
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("AddSongWindow.fxml"));
+        Parent root;
+        try {
+            root = loader.load();
 
-        if (selectedFiles != null) {
-            for (File file : selectedFiles) {
-                Song newSong = createSongFromMediaFile(file);
-                songList.add(new Media(file.toURI().toString()));
+            // Get the controller instance
+            AddSongWindowController addSongController = loader.getController();
 
-                // Add the newSong to the TableView
-                songTableView.getItems().add(newSong);
-            }
+            // Pass the reference of MainWindowController to AddSongWindowController
+            addSongController.setMainWindowController(this);
 
-            if (mediaPlayer == null) {
-                playNextSong();
-            }
+            // Create a new stage for the AddSongWindow
+            Stage stage = new Stage();
+            stage.setTitle("Add Song");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    private Song createSongFromMediaFile(File file){
+    private Song createSongFromMediaFile(File file) {
         return new Song(file.getName(), "Unknown Artist", "Unknown Genre", "0:00");
     }
 
+    public void updateSongProperties(String title, String artist, String genre, String filePath) {
+        // Create a new Media object from the selected file path
+        Media newMedia = new Media(new File(filePath).toURI().toString());
+
+        // Create a new Song object
+        Song newSong = new Song(title, artist, genre, "0:00");
+
+        // Add the newMedia to the songList
+        songList.add(newMedia);
+
+        // Add the newSong to the TableView
+        songTableView.getItems().add(newSong);
+
+        // If mediaPlayer is null, start playing the new song
+        if (mediaPlayer == null) {
+            playNextSong();
+
+        }
+        // Set the current song name
+        currentSongName = title;
+
+    }
+
+    private void updateTextFlow() {
+        Text songText = new Text(currentSongName);
+        songText.setStyle("-fx-font-size: 40.0;");
+
+        songTextFlow.getChildren().clear();
+        songTextFlow.getChildren().add(songText);
+    }
 
 }
