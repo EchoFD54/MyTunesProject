@@ -65,7 +65,7 @@ public class MainWindowController {
         TableColumn<Song, String> genreColumn = (TableColumn<Song, String>) songTableView.getColumns().get(2);
         TableColumn<Song, String> timeColumn = (TableColumn<Song, String>) songTableView.getColumns().get(3);
 
-        // Define cell value factories for each column
+        // Define  value for each column
         titleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
         artistColumn.setCellValueFactory(cellData -> cellData.getValue().artistProperty());
         genreColumn.setCellValueFactory(cellData -> cellData.getValue().genreProperty());
@@ -80,7 +80,7 @@ public class MainWindowController {
             }
         });
 
-        // Set the event handler for the addSongsBtn button
+        // Set the event handler for the addSongs button
         addSongsBtn.setOnAction(this::clickAddSongsBtn);
 
         if (songList.isEmpty()) {
@@ -121,14 +121,9 @@ public class MainWindowController {
             mediaView.setMediaPlayer(mediaPlayer);
             setSongProgress();
             setVolumeSlider();
-
             playCurrentSong();
             updateTimeLabel();
-
-            // Update the TextFlow with the current song name
             updateTextFlow();
-
-
 
         } else {
             // All songs have been played, loop back to the first song
