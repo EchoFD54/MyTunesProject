@@ -10,19 +10,34 @@ public class SongDAO implements ISongDAO {
 
     private final ConnectionManager cm = new ConnectionManager();
 
-    @Override
-    public Song getSong(int id) {
-        return null;
-    }
 
     @Override
-    public void deleteSong(int id) {
-
+    public void deleteSong(String title) {
+        try(Connection con = cm.getConnection())
+        {
+            String sql = "DELETE FROM Songs WHERE Title=?";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, title);
+            pstmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void updateSong(Song s) {
-
+        try(Connection con = cm.getConnection())
+        {
+            String sql = "UPDATE Songs SET Artist=?, Genre=? WHERE Title=?";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, s.artistProperty().get());
+            pstmt.setString(2, s.genreProperty().get());
+            pstmt.setString(3, s.titleProperty().get());
+            //pstmt.setInt(3, p.getId());
+            pstmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
