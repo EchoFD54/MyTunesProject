@@ -13,5 +13,4 @@ public interface ISongDAO {
     public List<Song> getAllSongs();
     public List<Song> getSongsFromPlaylist(int playlistId);
 
-            //throws PetShopException;
 }
