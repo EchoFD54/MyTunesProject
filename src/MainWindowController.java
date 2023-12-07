@@ -18,8 +18,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,10 +97,6 @@ public class MainWindowController {
         timerLabel.setText("0:00");
         playNextSong();
         System.out.println("Number of songs in the playlist: " + songList.size());
-        System.out.println("My Change");
-
-
-
     }
 
 
@@ -313,5 +307,4 @@ public class MainWindowController {
 
 
 }
-
 
