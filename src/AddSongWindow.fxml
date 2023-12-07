@@ -24,15 +24,5 @@
     <Label layoutX="37.0" layoutY="55.0" text="Name" />
     <Label layoutX="39.0" layoutY="100.0" text="Artist" />
 
-     <Button layoutX="105.0" layoutY="207.0" onAction="#browseFile" text="Browse" />
-     <TextField fx:id="fileField" editable="false" layoutX="191.0" layoutY="207.0" />
-     <TextField fx:id="genreField" layoutX="97.0" layoutY="136.0" />
-     <TextField fx:id="artistField" layoutX="97.0" layoutY="95.0" />
-     <TextField fx:id="titleField" layoutX="97.0" layoutY="50.0" />
-     <Label layoutX="24.0" layoutY="212.0" text="Select File" />
-     <Label layoutX="37.0" layoutY="141.0" text="Genre" />
-     <Label layoutX="37.0" layoutY="55.0" text="Name" />
-     <Label layoutX="39.0" layoutY="100.0" text="Artist" />
-
 
 </AnchorPane>
