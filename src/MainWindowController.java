@@ -248,11 +248,7 @@ public class MainWindowController {
             e.printStackTrace();
         }
     }
-
-    private Song createSongFromMediaFile(File file) {
-        return new Song(file.getName(), "Unknown Artist", "Unknown Genre", "0:00");
-    }
-
+    
     public void updateSongProperties(String title, String artist, String genre, String filePath) {
         // Create a new Media object from the selected file path
         Media newMedia = new Media(new File(filePath).toURI().toString());
