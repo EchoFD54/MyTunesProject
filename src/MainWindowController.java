@@ -1,6 +1,8 @@
+
 import be.Song;
 import dal.ISongDAO;
 import dal.SongDAO;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -60,7 +62,9 @@ public class MainWindowController {
     private boolean canPlaySong = false;
     private String currentSongName = "";
 
+
     ISongDAO songDAO = new SongDAO();
+
 
 
     public void initialize() {
@@ -290,6 +294,7 @@ public class MainWindowController {
         songTextFlow.getChildren().add(songText);
     }
 
+
     public void clickDeleteBtn(ActionEvent actionEvent) {
         Song s = songTableView.getSelectionModel().getSelectedItem();
         songDAO.deleteSong(s.titleProperty().get());
@@ -303,3 +308,6 @@ public class MainWindowController {
 
 
 }
+
+}
+

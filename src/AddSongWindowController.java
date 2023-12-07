@@ -1,6 +1,8 @@
+
 import be.Song;
 import dal.ISongDAO;
 import dal.SongDAO;
+
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
@@ -15,7 +17,9 @@ public class AddSongWindowController {
     public TextField titleField;
     private MainWindowController mainWindowController;
 
+
     ISongDAO songDAO = new SongDAO();
+
 
     public void addSong(ActionEvent actionEvent) {
         // Retrieve the song properties from the text fields
@@ -27,12 +31,14 @@ public class AddSongWindowController {
         // Update the song properties in the MainWindowController
         mainWindowController.updateSongProperties(title, artist, genre, filePath);
 
+
         for(Song song : songDAO.getAllSongs()){
             System.out.println("Songs: " + song);
         }
 
         Song s = new Song(title, artist, genre, "0:00", filePath);
         songDAO.createSong(s);
+
 
         // Close the AddSongWindow
         ((Stage) titleField.getScene().getWindow()).close();
