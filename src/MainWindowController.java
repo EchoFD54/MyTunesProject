@@ -1,3 +1,8 @@
+
+import be.Song;
+import dal.ISongDAO;
+import dal.SongDAO;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -58,6 +63,10 @@ public class MainWindowController {
     private String currentSongName = "";
 
 
+    ISongDAO songDAO = new SongDAO();
+
+
+
     public void initialize() {
         // Set up the columns in the TableView
         TableColumn<Song, String> titleColumn = (TableColumn<Song, String>) songTableView.getColumns().get(0);
@@ -91,6 +100,7 @@ public class MainWindowController {
         playNextSong();
         System.out.println("Number of songs in the playlist: " + songList.size());
         System.out.println("My Change");
+
 
 
     }
@@ -284,4 +294,20 @@ public class MainWindowController {
         songTextFlow.getChildren().add(songText);
     }
 
+
+    public void clickDeleteBtn(ActionEvent actionEvent) {
+        Song s = songTableView.getSelectionModel().getSelectedItem();
+        songDAO.deleteSong(s.titleProperty().get());
+    }
+
+    public void clickEditbtn(ActionEvent actionEvent) {
+        Song s = new Song("Memo", "Totest", "Crazy");
+        if(!songTableView.getSelectionModel().getSelectedItem().equals(s))
+            songDAO.updateSong(s);
+    }
+
+
 }
+
+}
+
