@@ -10,6 +10,9 @@ public class PlaylistDAO implements IPlaylistDAO {
 
     private final ConnectionManager cm = new ConnectionManager();
 
+    /**
+     * Deletes a Playlist on the Database by the ID
+     */
     @Override
     public void deletePlaylist(int playlistId) {
         try(Connection con = cm.getConnection())
@@ -23,6 +26,10 @@ public class PlaylistDAO implements IPlaylistDAO {
         }
     }
 
+    /**
+     * Updates a Playlist on the Database by the ID
+     * Values to update: Name
+     */
     @Override
     public void updatePlaylist(int playlistId, String playlistName) {
         try(Connection con = cm.getConnection())
@@ -37,6 +44,10 @@ public class PlaylistDAO implements IPlaylistDAO {
         }
     }
 
+    /**
+     * Creates a Playlist on the Database
+     * Values to create: Name & Time (Time is automatically calculated?)
+     */
     @Override
     public void createPlaylist(String playlistName, String playlistTime) {
         try(Connection con = cm.getConnection())
