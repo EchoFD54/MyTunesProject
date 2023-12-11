@@ -1,5 +1,6 @@
 
 import be.Song;
+import bll.SongManager;
 import dal.ISongDAO;
 import dal.SongDAO;
 
@@ -62,6 +63,7 @@ public class MainWindowController {
 
 
     ISongDAO songDAO = new SongDAO();
+    SongManager songManager = new SongManager();
 
 
 
@@ -296,13 +298,13 @@ public class MainWindowController {
 
     public void clickDeleteBtn(ActionEvent actionEvent) {
         Song s = songTableView.getSelectionModel().getSelectedItem();
-        songDAO.deleteSong(s.titleProperty().get());
+        songManager.deleteSong(s.songIdProperty().get());
     }
 
     public void clickEditbtn(ActionEvent actionEvent) {
         Song s = new Song("Memo", "Totest", "Crazy");
         if(!songTableView.getSelectionModel().getSelectedItem().equals(s))
-            songDAO.updateSong(s);
+            songManager.updateSong(s);
     }
 
 
