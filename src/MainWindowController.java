@@ -110,21 +110,32 @@ public class MainWindowController {
                 newMediaPlayer.setVolume(mediaPlayer.getVolume());
             }
 
-            mediaPlayer = newMediaPlayer;
-
             // Set up the end of media handler
-            mediaPlayer.setOnEndOfMedia(() -> {
+            newMediaPlayer.setOnEndOfMedia(() -> {
                 songIndex++;
                 playNextSong();
             });
 
+            // Set up the ready event handler to update the duration
+            newMediaPlayer.setOnReady(() -> {
+                Duration duration = newMediaPlayer.getMedia().getDuration();
+                String formattedTime = formatDuration(duration);
+
+                // Update the current song's duration in the TableView
+                Song currentSong = songTableView.getItems().get(songIndex);
+                currentSong.setTime(formattedTime);
+
+                // Update the TextFlow with the current song name
+                updateTextFlow();
+            });
+
+            mediaPlayer = newMediaPlayer;
             mediaView.setMediaPlayer(mediaPlayer);
             setSongProgress();
             setVolumeSlider();
+
             playCurrentSong();
             updateTimeLabel();
-            updateTextFlow();
-
         } else {
             // All songs have been played, loop back to the first song
             songIndex = 0;
@@ -249,15 +260,12 @@ public class MainWindowController {
         }
     }
 
-    public void updateSongProperties(String title, String artist, String genre, String filePath) {
-        // Create a new Media object from the selected file path
-        Media newMedia = new Media(new File(filePath).toURI().toString());
-
-        // Create a new Song object
-        Song newSong = new Song(title, artist, genre, "0:00");
+    public void updateSongProperties(String title, String artist, String genre, String time, String filePath) {
+        // Create a new Song object with the actual time
+        Song newSong = new Song(title, artist, genre, time, filePath);
 
         // Add the newMedia to the songList
-        songList.add(newMedia);
+        songList.add(new Media(new File(filePath).toURI().toString()));
 
         // Add the newSong to the TableView
         songTableView.getItems().add(newSong);
@@ -265,10 +273,13 @@ public class MainWindowController {
         // If mediaPlayer is null, start playing the new song
         if (mediaPlayer == null) {
             playNextSong();
-
         }
+
         // Set the current song name
         currentSongName = title;
+
+        // Update the TextFlow with the current song name
+        updateTextFlow();
 
     }
 

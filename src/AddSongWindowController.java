@@ -1,7 +1,9 @@
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextField;
+import javafx.scene.media.Media;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.File;
 
@@ -19,8 +21,17 @@ public class AddSongWindowController {
         String genre = genreField.getText();
         String filePath = fileField.getText();
 
+        // Create a new Media object from the selected file path
+        Media newMedia = new Media(new File(filePath).toURI().toString());
+
+        // Get the actual duration of the song
+        Duration duration = newMedia.getDuration();
+        String formattedTime = formatDuration(duration);
+
         // Update the song properties in the MainWindowController
-        mainWindowController.updateSongProperties(title, artist, genre, filePath);
+        mainWindowController.updateSongProperties(title, artist, genre, formattedTime, filePath);
+
+        // ...
 
         // Close the AddSongWindow
         ((Stage) titleField.getScene().getWindow()).close();
@@ -40,4 +51,11 @@ public class AddSongWindowController {
     public void setMainWindowController(MainWindowController mainWindowController) {
         this.mainWindowController = mainWindowController;
     }
+
+    private String formatDuration(Duration duration) {
+        int minutes = (int) duration.toMinutes();
+        int seconds = (int) (duration.toSeconds() % 60);
+        return String.format("%d:%02d", minutes, seconds);
+    }
+
 }

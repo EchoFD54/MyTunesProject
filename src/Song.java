@@ -7,7 +7,7 @@ public class Song {
     private StringProperty genre;
     private StringProperty time;
 
-    public Song(String title, String artist, String genre, String time) {
+    public Song(String title, String artist, String genre, String time, String filePath) {
         this.title = new SimpleStringProperty(title);
         this.artist = new SimpleStringProperty(artist);
         this.genre = new SimpleStringProperty(genre);
