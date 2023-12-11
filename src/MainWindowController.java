@@ -45,8 +45,6 @@ public class MainWindowController {
     public Button addSongsBtn;
     @FXML
     public TableView<Song> songTableView;
-
-    //HEREEEEEEEEEEEEEE
     @FXML
     public TableView<Playlist> playlistList;
     @FXML
@@ -407,7 +405,6 @@ public class MainWindowController {
     }
 
     public void addSelectedSongToPlaylist(){
-        System.out.println(songTableView.getSelectionModel().getSelectedItem().toString());
         if (songListView != null && selectedPlaylist != null){
             String selectedSong = songListView.getSelectionModel().getSelectedItems().toString();
             System.out.println(selectedPlaylist.getName().getValue());
