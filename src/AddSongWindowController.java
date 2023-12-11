@@ -1,4 +1,6 @@
 import be.Song;
+import bll.PlaylistManager;
+import bll.SongManager;
 import dal.ISongDAO;
 import dal.SongDAO;
 
@@ -16,8 +18,7 @@ public class AddSongWindowController {
     public TextField titleField;
     private MainWindowController mainWindowController;
 
-
-    ISongDAO songDAO = new SongDAO();
+    SongManager songManager = new SongManager();
 
 
     public void addSong(ActionEvent actionEvent) {
@@ -31,12 +32,13 @@ public class AddSongWindowController {
         mainWindowController.updateSongProperties(title, artist, genre, filePath);
 
 
-        for(Song song : songDAO.getAllSongs()){
+        for(Song song : songManager.getAllSongs()){
             System.out.println("Songs: " + song);
         }
 
         Song s = new Song(title, artist, genre, "0:00", filePath);
-        songDAO.createSong(s);
+        songManager.createSong(s);
+
 
 
         // Close the AddSongWindow
