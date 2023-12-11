@@ -47,6 +47,8 @@ public class MainWindowController {
     @FXML
     public TableColumn timeColumn;
     @FXML
+    public Button editBtn;
+    @FXML
     private ListView<String> songListView;
     @FXML
     private MediaView mediaView;
@@ -289,6 +291,47 @@ public class MainWindowController {
 
         songTextFlow.getChildren().clear();
         songTextFlow.getChildren().add(songText);
+    }
+
+    public void clickEditBtn(ActionEvent actionEvent) {
+        // Check if a song is selected in the TableView
+        Song selectedSong = songTableView.getSelectionModel().getSelectedItem();
+
+        if (selectedSong != null) {
+            // Open the AddSongWindowController with the selected song's properties
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("AddSongWindow.fxml"));
+            Parent root;
+            try {
+                root = loader.load();
+
+                // Get the controller instance
+                AddSongWindowController addSongController = loader.getController();
+
+                // Pass the reference of MainWindowController to AddSongWindowController
+                addSongController.setMainWindowController(this);
+
+                // Set the fields in AddSongWindowController with the selected song's properties
+                addSongController.titleField.setText(selectedSong.titleProperty().get());
+                addSongController.artistField.setText(selectedSong.artistProperty().get());
+                addSongController.genreField.setText(selectedSong.genreProperty().get());
+                addSongController.fileField.setText(selectedSong.filePathProperty().get());
+
+                // Create a new stage for the AddSongWindow
+                Stage stage = new Stage();
+                stage.setTitle("Edit Song");
+                stage.setScene(new Scene(root));
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            // Show an alert or message indicating that no song is selected
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No Song Selected");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a song from the playlist to edit.");
+            alert.showAndWait();
+        }
     }
 
 }
