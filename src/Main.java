@@ -14,6 +14,7 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("MainWindow.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
+        primaryStage.setTitle("fking stupid asshole");
         primaryStage.setScene(scene);
         primaryStage.show();
     }

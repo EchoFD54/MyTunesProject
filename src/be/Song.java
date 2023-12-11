@@ -90,7 +90,6 @@ public class Song {
                 ", artist=" + artist.get() +
                 ", genre=" + genre.get() +
                 ", time=" + time.get() +
-                ", filePath=" + filePath.get() +
                 '}';
     }
 }

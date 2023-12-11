@@ -5,7 +5,6 @@ import dal.IPlaylistDAO;
 import dal.ISongDAO;
 import dal.PlaylistDAO;
 import dal.SongDAO;
-
 import java.util.List;
 
 public class SongManager {

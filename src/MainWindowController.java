@@ -1,9 +1,12 @@
 
+import be.Playlist;
 import be.Song;
 import bll.SongManager;
 import dal.ISongDAO;
 import dal.SongDAO;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +18,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.io.File;
@@ -37,11 +41,14 @@ public class MainWindowController {
     public Label timerLabel;
     @FXML
     public TextFlow songTextFlow;
-    public ListView playlistList;
     @FXML
     public Button addSongsBtn;
     @FXML
     public TableView<Song> songTableView;
+
+    //HEREEEEEEEEEEEEEE
+    @FXML
+    public TableView<Playlist> playlistList;
     @FXML
     public TableColumn titleColumn;
     @FXML
@@ -51,11 +58,19 @@ public class MainWindowController {
     @FXML
     public TableColumn timeColumn;
     @FXML
+    public TableColumn playlistName;
+    @FXML
+    public TableColumn songs;
+    @FXML
+    public TableColumn time;
+    @FXML
     private ListView<String> songListView;
     @FXML
     private MediaView mediaView;
     private MediaPlayer mediaPlayer;
     private List<Media> songList = new ArrayList<>();
+
+    private Playlist selectedPlaylist;
     private int songIndex = 0;
     private double currentVolume = 0.5;
     private boolean canPlaySong = false;
@@ -79,6 +94,16 @@ public class MainWindowController {
         artistColumn.setCellValueFactory(cellData -> cellData.getValue().artistProperty());
         genreColumn.setCellValueFactory(cellData -> cellData.getValue().genreProperty());
         timeColumn.setCellValueFactory(cellData -> cellData.getValue().timeProperty());
+
+
+        TableColumn<Playlist, String> playlistName = (TableColumn<Playlist, String>) playlistList.getColumns().get(0);
+        TableColumn<Playlist, String> songs = (TableColumn<Playlist, String>) playlistList.getColumns().get(1);
+        TableColumn<Playlist, String> time = (TableColumn<Playlist, String>) playlistList.getColumns().get(2);
+
+        // Define cell value factories for each column
+        playlistName.setCellValueFactory(cellData -> cellData.getValue().getName());
+        songs.setCellValueFactory(cellData -> cellData.getValue().getSongs());
+        time.setCellValueFactory(cellData -> cellData.getValue().getTime());
 
         // Set a listener for handling song selection
         songTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -216,12 +241,55 @@ public class MainWindowController {
         }
     }
 
+    public void deletePlaylist(int selectedPlaylistId){
+        ObservableList<Playlist> playlists = playlistList.getItems();
+        playlists.remove(selectedPlaylistId);
+    }
+    public void editPlaylist(String selectedPlaylistName, Playlist newPlaylistName){
+        newPlaylistName.setName(selectedPlaylistName);
+        ObservableList<Playlist> playlists = playlistList.getItems();
+        int index = playlists.indexOf(selectedPlaylistName);
+        if (index != -1){
+            playlists.set(index, newPlaylistName);  // Update the name of the playlist
+            playlistList.setItems(playlists);  // Update the playlistList view
+        }
+    }
+    @FXML
+    private void openNewPlaylistWindow() {
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("NewPlaylist.fxml"));
+            Parent root = loader.load();
+
+            NewPlaylistController newWindowController = loader.getController();
+            newWindowController.setMainWindowController(this);
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Create New Playlist");
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void updateTimeLabel() {
         mediaPlayer.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
             Duration currentTime = mediaPlayer.getCurrentTime();
             String formattedTime = formatDuration(currentTime);
             timerLabel.setText(formattedTime);
         });
+    }
+
+    public void getPlaylist(Playlist playlist) {
+        this.selectedPlaylist = playlist;
+    }
+
+    public void createPlaylist(Playlist playlistName){
+        ObservableList<Playlist> playlists = playlistList.getItems();
+        playlists.add(playlistName);  // Add the new playlist name to the list
+        playlistList.setItems(playlists);  // Update the playlist view
+
     }
 
     private String formatDuration(Duration duration) {
@@ -301,12 +369,75 @@ public class MainWindowController {
         songManager.deleteSong(s.songIdProperty().get());
     }
 
-    public void clickEditbtn(ActionEvent actionEvent) {
+    public void clickEditBtn(ActionEvent actionEvent) {
         Song s = new Song("Memo", "Totest", "Crazy");
         if(!songTableView.getSelectionModel().getSelectedItem().equals(s))
             songManager.updateSong(s);
     }
+    @FXML
+    private void openDeletePlaylistWindow(){
+        int selectedPlayListId = playlistList.getSelectionModel().getSelectedIndex();
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("DeletePlaylist.fxml"));
+            Parent root = loader.load();
+
+            DeletePlaylistController deleteController = loader.getController();
+            deleteController.setMainWindowController(this);
+            deleteController.setSelectedId(selectedPlayListId);
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Delete Playlist");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
+    private void updateSongsInPlaylist(){
+        if (selectedPlaylist != null) {
+            //songTableView.setItems(selectedPlaylist.getSongs());
+        }
+        else {
+            // Clear the song list view if no playlist is selected
+            songTableView.setItems(FXCollections.observableArrayList());
+        }
+    }
+
+    public void addSelectedSongToPlaylist(){
+        System.out.println(songTableView.getSelectionModel().getSelectedItem().toString());
+        if (songListView != null && selectedPlaylist != null){
+            String selectedSong = songListView.getSelectionModel().getSelectedItems().toString();
+            System.out.println(selectedPlaylist.getName().getValue());
+            if (selectedSong != null) {
+                //selectedPlaylist.addSong(selectedSong);
+                updateSongsInPlaylist();
+            }
+        }
+    }
+
+    @FXML
+    private void openEditPlaylistWindow(){
+        Playlist selectedPlaylistName = playlistList.getSelectionModel().getSelectedItems().get(0);  // Retrieve the selected playlist name
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("EditPlaylist.fxml"));
+            Parent root = loader.load();
+
+            EditPlaylistController editPlaylistController = loader.getController();
+            editPlaylistController.setMainWindowController(this);
+            editPlaylistController.setSelectedPlaylistName(selectedPlaylistName); // Pass the selected playlist name
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Edit Playlist");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
 
