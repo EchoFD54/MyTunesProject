@@ -47,6 +47,8 @@ public class MainWindowController {
     @FXML
     public TableColumn timeColumn;
     @FXML
+    public Button editBtn;
+    @FXML
     private ListView<String> songListView;
     @FXML
     private MediaView mediaView;
@@ -291,4 +293,6 @@ public class MainWindowController {
         songTextFlow.getChildren().add(songText);
     }
 
+    public void clickEditBtn(ActionEvent actionEvent) {
+    }
 }
