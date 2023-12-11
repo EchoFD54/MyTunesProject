@@ -54,4 +54,8 @@ public class Song {
     public void setFilePath(String filePath) {
         this.filePath.set(filePath);
     }
+
+    public String getFilePath() {
+        return filePath.get();
+    }
 }

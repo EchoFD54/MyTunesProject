@@ -13,6 +13,7 @@ public class AddSongWindowController {
     public TextField artistField;
     public TextField titleField;
     private MainWindowController mainWindowController;
+    private Stage stage;
 
     public void addSong(ActionEvent actionEvent) {
         // Retrieve the song properties from the text fields
@@ -56,6 +57,17 @@ public class AddSongWindowController {
         int minutes = (int) duration.toMinutes();
         int seconds = (int) (duration.toSeconds() % 60);
         return String.format("%d:%02d", minutes, seconds);
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    // method to close the window
+    public void closeAddSongWindow() {
+        if (stage != null) {
+            stage.close();
+        }
     }
 
 }

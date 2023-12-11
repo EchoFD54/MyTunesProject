@@ -58,6 +58,7 @@ public class MainWindowController {
     private double currentVolume = 0.5;
     private boolean canPlaySong = false;
     private String currentSongName = "";
+    private AddSongWindowController addSongController;
 
 
     public void initialize() {
@@ -247,7 +248,7 @@ public class MainWindowController {
             root = loader.load();
 
             // Get the controller instance
-            AddSongWindowController addSongController = loader.getController();
+            addSongController = loader.getController();
 
             // Pass the reference of MainWindowController to AddSongWindowController
             addSongController.setMainWindowController(this);
@@ -263,17 +264,37 @@ public class MainWindowController {
     }
 
     public void updateSongProperties(String title, String artist, String genre, String time, String filePath) {
-        // Create a new Song object with the actual time
-        Song newSong = new Song(title, artist, genre, time, filePath);
+        // Check if the song is already in the TableView
+        boolean songExists = false;
+        Song existingSong = null;
 
-        // Add the newMedia to the songList
-        songList.add(new Media(new File(filePath).toURI().toString()));
+        for (Song song : songTableView.getItems()) {
+            if (song.getFilePath().equals(filePath)) {
+                // Modify existing song's properties
+                existingSong = song;
+                existingSong.setTitle(title);
+                existingSong.setArtist(artist);
+                existingSong.setGenre(genre);
+                existingSong.setTime(time);
+                songExists = true;
+                break;
+            }
+        }
 
-        // Add the newSong to the TableView
-        songTableView.getItems().add(newSong);
+        // If the song is not in the TableView, add a new one
+        if (!songExists) {
+            // Create a new Song object with the actual time
+            Song newSong = new Song(title, artist, genre, time, filePath);
 
-        // If mediaPlayer is null, start playing the new song
-        if (mediaPlayer == null) {
+            // Add the newMedia to the songList
+            songList.add(new Media(new File(filePath).toURI().toString()));
+
+            // Add the newSong to the TableView
+            songTableView.getItems().add(newSong);
+        }
+
+        // If mediaPlayer is null or the existingSong is being played, start playing the new song
+        if (mediaPlayer == null || (existingSong != null && mediaPlayer.getMedia().getSource().equals(existingSong.getFilePath()))) {
             playNextSong();
         }
 
@@ -282,6 +303,11 @@ public class MainWindowController {
 
         // Update the TextFlow with the current song name
         updateTextFlow();
+
+       // Close the AddSongWindow
+        if (addSongController != null) {
+            addSongController.closeAddSongWindow();
+        }
 
     }
 
@@ -320,6 +346,10 @@ public class MainWindowController {
                 Stage stage = new Stage();
                 stage.setTitle("Edit Song");
                 stage.setScene(new Scene(root));
+
+                // Set the stage to AddSongWindowController
+                addSongController.setStage(stage);
+
                 stage.show();
             } catch (IOException e) {
                 e.printStackTrace();
