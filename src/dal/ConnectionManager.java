@@ -9,6 +9,9 @@ public class ConnectionManager {
 
     private final SQLServerDataSource ds;
 
+    /**
+     * Connection to the Database
+     */
     public ConnectionManager() {
         ds = new SQLServerDataSource();
         ds.setDatabaseName("CSe2023b_MyTunes_TeamF");

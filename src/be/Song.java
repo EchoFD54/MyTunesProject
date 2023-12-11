@@ -1,5 +1,7 @@
 package be;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -11,12 +13,22 @@ public class Song {
     private StringProperty genre;
     private StringProperty time;
     private StringProperty filePath;
+    private IntegerProperty songId;
 
     public Song(String title, String artist, String genre, String time) {
         this.title = new SimpleStringProperty(title);
         this.artist = new SimpleStringProperty(artist);
         this.genre = new SimpleStringProperty(genre);
         this.time = new SimpleStringProperty(time);
+    }
+
+    public Song(int songId, String title, String artist, String genre, String time, String filePath) {
+        this.songId = new SimpleIntegerProperty(songId);
+        this.title = new SimpleStringProperty(title);
+        this.artist = new SimpleStringProperty(artist);
+        this.genre = new SimpleStringProperty(genre);
+        this.time = new SimpleStringProperty(time);
+        this.filePath = new SimpleStringProperty(filePath);
     }
 
     public Song(String title, String artist, String genre, String time, String filePath) {
@@ -33,6 +45,9 @@ public class Song {
         this.genre = new SimpleStringProperty(genre);
     }
 
+    public IntegerProperty songIdProperty(){
+        return songId;
+    }
     public StringProperty titleProperty() {
         return title;
     }
