@@ -20,6 +20,11 @@ public class Playlist {
         this.name = new SimpleStringProperty(name);
     }
 
+    public Playlist(String name, String time){
+        this.name = new SimpleStringProperty(name);
+        this.time = new SimpleStringProperty(time);
+    }
+
     public Playlist(String name, String time, String songs){
         this.name = new SimpleStringProperty(name);
         this.time = new SimpleStringProperty(time);
