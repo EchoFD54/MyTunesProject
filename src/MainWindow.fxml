@@ -12,7 +12,7 @@
 <?import javafx.scene.media.MediaView?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane prefHeight="637.0" prefWidth="784.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainWindowController">
+<AnchorPane prefHeight="637.0" prefWidth="784.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainWindowController">
    <children>
       <Slider fx:id="volumeSlider" layoutX="619.0" layoutY="125.0" />
       <MediaView fx:id="mediaView" fitHeight="200.0" fitWidth="200.0" layoutX="5.0" layoutY="431.0" />
@@ -32,7 +32,7 @@
          </columns>
       </TableView>
       <Label layoutX="81.0" layoutY="96.0" prefHeight="21.0" prefWidth="65.0" text="Playlists" />
-      <Button layoutX="380.0" layoutY="157.0" mnemonicParsing="false" onAction="#clickEditBtn" text="Edit Song" />
+      <Button fx:id="editBtn" layoutX="380.0" layoutY="157.0" mnemonicParsing="false" onAction="#clickEditBtn" text="Edit Song" />
       <Button layoutX="477.0" layoutY="157.0" mnemonicParsing="false" onAction="#clickDeleteBtn" text="Delete Song" />
       <MenuButton layoutX="683.0" layoutY="157.0" mnemonicParsing="false" text="Sort By">
          <items>
@@ -42,7 +42,7 @@
       </MenuButton>
       <Button layoutX="672.0" layoutY="416.0" mnemonicParsing="false" onAction="#addSelectedSongToPlaylist" text="Add to Playlist" />
       <Button layoutX="19.0" layoutY="119.0" mnemonicParsing="false" onAction="#openNewPlaylistWindow" text="New" />
-      <Button layoutX="87.0" layoutY="120.0" mnemonicParsing="false" text="Edit" onAction="#openEditPlaylistWindow"/>
+      <Button layoutX="87.0" layoutY="120.0" mnemonicParsing="false" onAction="#openEditPlaylistWindow" text="Edit" />
       <Button layoutX="52.0" layoutY="23.0" mnemonicParsing="false" text="Go to Library" />
       <TableView fx:id="songTableView" layoutX="213.0" layoutY="198.0" prefHeight="200.0" prefWidth="559.0">
 

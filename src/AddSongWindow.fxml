@@ -7,12 +7,12 @@
 <?import javafx.scene.layout.HBox?>
 
 <AnchorPane prefHeight="342.0" prefWidth="401.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AddSongWindowController">
-    <Label layoutX="24.0" layoutY="14.0" text="Add Song" />
+    <Label layoutX="24.0" layoutY="14.0" text="Add or Edit a Song" />
     <HBox />
     <HBox />
     <HBox />
     <HBox />
-    <Button layoutX="130.0" layoutY="275.0" onAction="#addSong" text="Add Song" />
+    <Button layoutX="130.0" layoutY="275.0" onAction="#addSong" text="Add/Edit Song" />
 
     <Button layoutX="105.0" layoutY="207.0" onAction="#browseFile" text="Browse" />
     <TextField fx:id="fileField" editable="false" layoutX="191.0" layoutY="207.0" />

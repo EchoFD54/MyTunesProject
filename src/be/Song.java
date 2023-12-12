@@ -83,6 +83,10 @@ public class Song {
         this.time.set(time);
     }
 
+    public String getFilePath() {
+        return filePath.get();
+    }
+
     @Override
     public String toString() {
         return "Song{" +
