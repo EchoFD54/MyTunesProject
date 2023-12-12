@@ -42,10 +42,6 @@ public class AddSongWindowController {
         mainWindowController.updateSongProperties(title, artist, genre, formattedTime, filePath);
 
 
-        for(Song song : songManager.getAllSongs()){
-            System.out.println("Songs: " + song);
-        }
-
         Song s = new Song(title, artist, genre, "0:00", filePath);
         songManager.createSong(s);
 
