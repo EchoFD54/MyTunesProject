@@ -1,6 +1,7 @@
 
 import be.Playlist;
 import be.Song;
+import bll.PlaylistManager;
 import bll.SongManager;
 import dal.ISongDAO;
 import dal.SongDAO;
@@ -77,10 +78,8 @@ public class MainWindowController {
     private String currentSongName = "";
     private AddSongWindowController addSongController;
 
-
-    ISongDAO songDAO = new SongDAO();
     SongManager songManager = new SongManager();
-
+    PlaylistManager playlistManager = new PlaylistManager();
 
 
     public void initialize() {
@@ -96,6 +95,11 @@ public class MainWindowController {
         genreColumn.setCellValueFactory(cellData -> cellData.getValue().genreProperty());
         timeColumn.setCellValueFactory(cellData -> cellData.getValue().timeProperty());
 
+        // Shows all songs saved on the Database
+        for(Song s : songManager.getAllSongs()){
+            songTableView.getItems().add(s);
+        }
+
 
         TableColumn<Playlist, String> playlistName = (TableColumn<Playlist, String>) playlistList.getColumns().get(0);
         TableColumn<Playlist, String> songs = (TableColumn<Playlist, String>) playlistList.getColumns().get(1);
@@ -105,6 +109,11 @@ public class MainWindowController {
         playlistName.setCellValueFactory(cellData -> cellData.getValue().getName());
         songs.setCellValueFactory(cellData -> cellData.getValue().getSongs());
         time.setCellValueFactory(cellData -> cellData.getValue().getTime());
+
+        // Shows all playlists saved on the Database
+        for(Playlist p : playlistManager.getAllPlaylists()){
+            playlistList.getItems().add(p);
+        }
 
         // Set a listener for handling song selection
         songTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -125,6 +134,8 @@ public class MainWindowController {
         timerLabel.setText("0:00");
         playNextSong();
         System.out.println("Number of songs in the playlist: " + songList.size());
+
+
     }
 
 
@@ -296,7 +307,6 @@ public class MainWindowController {
         ObservableList<Playlist> playlists = playlistList.getItems();
         playlists.add(playlistName);  // Add the new playlist name to the list
         playlistList.setItems(playlists);  // Update the playlist view
-
     }
 
     private String formatDuration(Duration duration) {
