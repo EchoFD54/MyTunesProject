@@ -1,5 +1,6 @@
 package dal;
 
+import be.Playlist;
 import be.Song;
 
 import java.util.List;
@@ -15,18 +16,18 @@ public interface IPlaylistDAO {
      * Updates a Playlist on the Database by the ID
      * Values to update: Name
      */
-    public void updatePlaylist(int playlistId, String playlistName);
+    public void updatePlaylist(String newPlaylistName, String playlistName);
 
     /**
      * Creates a Playlist on the Database
      * Values to create: Name & Time (Time is automatically calculated?)
      */
-    public void createPlaylist(String playlistName, String playlistTime);
+    public void createPlaylist(Playlist playlist);
 
     /**
      * Need UPDATE: change List<Song> for List<Playlist>
      * @return a list of playlists
      */
-    public List<Song> getAllPlaylists();
+    public List<Playlist> getAllPlaylists();
 
 }

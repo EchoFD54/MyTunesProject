@@ -1,5 +1,6 @@
 package bll;
 
+import be.Playlist;
 import be.Song;
 import dal.IPlaylistDAO;
 import dal.ISongDAO;
@@ -15,15 +16,15 @@ public class PlaylistManager {
     /**
      * Creates a Playlist on the Database
      */
-    public void createPlaylist(String playlistName, String playlistTime) {
-        playlistDAO.createPlaylist(playlistName, playlistTime);
+    public void createPlaylist(Playlist playlist) {
+        playlistDAO.createPlaylist(playlist);
     }
 
     /**
      * Updates a Playlist on the Database by the ID of the same
      */
-    public void updatePlaylist(int playlistId, String playlistName) {
-        playlistDAO.updatePlaylist(playlistId, playlistName);
+    public void updatePlaylist(String newPlaylistName, String playlistName) {
+        playlistDAO.updatePlaylist(newPlaylistName, playlistName);
     }
 
     /**
@@ -38,7 +39,7 @@ public class PlaylistManager {
      * @return a list of playlists
      * Gets all the Playlists saved on the Database
      */
-    public List<Song> getAllPlaylists() {
+    public List<Playlist> getAllPlaylists() {
         return playlistDAO.getAllPlaylists();
     }
 

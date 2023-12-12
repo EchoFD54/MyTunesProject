@@ -80,7 +80,7 @@ public class SongDAO implements ISongDAO {
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             while(rs.next()){
-                int id            = rs.getInt("SongId");
+                //int id            = rs.getInt("SongId");
                 String title      = rs.getString("Title");
                 String artist     = rs.getString("Artist");
                 String genre      = rs.getString("Genre");

@@ -1,5 +1,6 @@
 package dal;
 
+import be.Playlist;
 import be.Song;
 
 import java.sql.*;
@@ -31,13 +32,13 @@ public class PlaylistDAO implements IPlaylistDAO {
      * Values to update: Name
      */
     @Override
-    public void updatePlaylist(int playlistId, String playlistName) {
+    public void updatePlaylist(String newPlaylistName, String playlistName) {
         try(Connection con = cm.getConnection())
         {
-            String sql = "UPDATE Playlists SET Name=? WHERE PlaylistId=?";
+            String sql = "UPDATE Playlists SET Name=? WHERE Name=?";
             PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, playlistName);
-            pstmt.setInt(2, playlistId);
+            pstmt.setString(1, newPlaylistName);
+            pstmt.setString(2, playlistName);
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -49,13 +50,13 @@ public class PlaylistDAO implements IPlaylistDAO {
      * Values to create: Name & Time (Time is automatically calculated?)
      */
     @Override
-    public void createPlaylist(String playlistName, String playlistTime) {
+    public void createPlaylist(Playlist playlist) {
         try(Connection con = cm.getConnection())
         {
-            String sql = "INSERT INTO Playlists(Name, Time) VALUES (?,?)";
+            String sql = "INSERT INTO Playlists(Name) VALUES (?)";
             PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, playlistName);
-            pstmt.setString(2, playlistTime);
+            pstmt.setString(1, playlist.getName().get());
+            //pstmt.setString(2, playlist.getTime().get());
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -67,8 +68,8 @@ public class PlaylistDAO implements IPlaylistDAO {
      * @return a list of playlists
      */
     @Override
-    public List<Song> getAllPlaylists() {
-        List<Song> songs = new ArrayList<>();
+    public List<Playlist> getAllPlaylists() {
+        List<Playlist> playlists = new ArrayList<>();
 
         try(Connection con = cm.getConnection())
         {
@@ -76,15 +77,14 @@ public class PlaylistDAO implements IPlaylistDAO {
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             while(rs.next()){
-                int id          = rs.getInt("PlaylistId");
-                String title    = rs.getString("Name");
+                //int id          = rs.getInt("PlaylistId");
+                String name    = rs.getString("Name");
                 String time   = rs.getString("Time");
 
-                //code needs to be updated for -> Playlist
-                //Song s = new Song(title, artist, genre, time, filePath);
-                //songs.add(s);
+                Playlist p = new Playlist(name, time);
+                playlists.add(p);
             }
-            return songs;
+            return playlists;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
