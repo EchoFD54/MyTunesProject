@@ -1,4 +1,5 @@
 import be.Playlist;
+import bll.PlaylistManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -8,6 +9,7 @@ public class EditPlaylistController {
     private TextField editPlaylistNameField;
     private MainWindowController mainWindowController;
     private Playlist selectedPlaylistName;
+    private PlaylistManager playlistManager = new PlaylistManager();
 
     public void setMainWindowController(MainWindowController controller){
         this.mainWindowController = controller;
@@ -25,6 +27,7 @@ public class EditPlaylistController {
             String newPlaylistName = editPlaylistNameField.getText().trim();
 
             if (!newPlaylistName.isEmpty()) {
+                playlistManager.updatePlaylist(newPlaylistName, selectedPlaylistName.getName().get());
                 mainWindowController.editPlaylist(newPlaylistName, selectedPlaylistName);
                 closeEditedWindow();
             }
