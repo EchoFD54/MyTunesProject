@@ -530,5 +530,25 @@ public class MainWindowController {
             songsInPlaylist.getItems().add(s);
         }
     }
+
+    @FXML
+    private void moveSongUp(ActionEvent actionEvent){
+        int selectedIndex = songsInPlaylist.getSelectionModel().getSelectedIndex();
+        if (selectedIndex > 0){
+            Song selectedSong = songsInPlaylist.getItems().remove(selectedIndex);
+            songsInPlaylist.getItems().add(selectedIndex - 1, selectedSong);
+            songsInPlaylist.getSelectionModel().select(selectedIndex - 1);
+        }
+    }
+
+    @FXML
+    private void moveSongDown(ActionEvent actionEvent){
+        int selectedIndex = songsInPlaylist.getSelectionModel().getSelectedIndex();
+        if (selectedIndex >= 0 && selectedIndex < songsInPlaylist.getItems().size() -1){
+            Song selectedSong = songsInPlaylist.getItems().remove(selectedIndex);
+            songsInPlaylist.getItems().add(selectedIndex + 1, selectedSong);
+            songsInPlaylist.getSelectionModel().select(selectedIndex + 1);
+        }
+    }
 }
 
