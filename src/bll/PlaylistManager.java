@@ -42,5 +42,12 @@ public class PlaylistManager {
     public List<Playlist> getAllPlaylists() {
         return playlistDAO.getAllPlaylists();
     }
+    public List<Song> CreateSongsOfPlaylist(int PlaylistId, int SongsId){
+        return playlistDAO.CreateSongsOfPlaylist(PlaylistId, SongsId);
+    }
+
+    public List<Song> getAllSongsOfPlaylist(int PlaylistId){
+        return playlistDAO.getAllSongsOfPlaylist(PlaylistId);
+    }
 
 }

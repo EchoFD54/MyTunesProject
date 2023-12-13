@@ -14,6 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
@@ -49,21 +50,11 @@ public class MainWindowController {
     @FXML
     public TableView<Playlist> playlistList;
     @FXML
-    public TableColumn titleColumn;
-    @FXML
-    public TableColumn artistColumn;
-    @FXML
-    public TableColumn genreColumn;
-    @FXML
-    public TableColumn timeColumn;
-    @FXML
-    public TableColumn playlistName;
-    @FXML
-    public TableColumn songs;
-    @FXML
-    public TableColumn time;
+    public TableColumn titleColumn,artistColumn,genreColumn,timeColumn,playlistName,songs,time, titleCol, artistCol, genreCol, timeCol;
     @FXML
     public Button editBtn;
+    @FXML
+    public TableView<Song> songsInPlaylist;
     @FXML
     private ListView<String> songListView;
     @FXML
@@ -100,7 +91,7 @@ public class MainWindowController {
             songTableView.getItems().add(s);
         }
 
-
+        // Set up the columns in the TableView
         TableColumn<Playlist, String> playlistName = (TableColumn<Playlist, String>) playlistList.getColumns().get(0);
         TableColumn<Playlist, String> songs = (TableColumn<Playlist, String>) playlistList.getColumns().get(1);
         TableColumn<Playlist, String> time = (TableColumn<Playlist, String>) playlistList.getColumns().get(2);
@@ -109,6 +100,18 @@ public class MainWindowController {
         playlistName.setCellValueFactory(cellData -> cellData.getValue().getName());
         songs.setCellValueFactory(cellData -> cellData.getValue().getSongs());
         time.setCellValueFactory(cellData -> cellData.getValue().getTime());
+
+        // Set up the columns in the TableView
+        TableColumn<Song, String> titleCol = (TableColumn<Song, String>) songsInPlaylist.getColumns().get(0);
+        TableColumn<Song, String> artistCol = (TableColumn<Song, String>) songsInPlaylist.getColumns().get(1);
+        TableColumn<Song, String> genreCol = (TableColumn<Song, String>) songsInPlaylist.getColumns().get(2);
+        TableColumn<Song, String> timeCol = (TableColumn<Song, String>) songsInPlaylist.getColumns().get(3);
+
+        // Define cell value factories for each column
+        titleCol.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
+        artistCol.setCellValueFactory(cellData -> cellData.getValue().artistProperty());
+        genreCol.setCellValueFactory(cellData -> cellData.getValue().genreProperty());
+        timeCol.setCellValueFactory(cellData -> cellData.getValue().timeProperty());
 
         // Shows all playlists saved on the Database
         for(Playlist p : playlistManager.getAllPlaylists()){
@@ -133,7 +136,7 @@ public class MainWindowController {
 
         timerLabel.setText("0:00");
         playNextSong();
-        System.out.println("Number of songs in the playlist: " + songList.size());
+
 
 
     }
@@ -182,7 +185,7 @@ public class MainWindowController {
         } else {
             // All songs have been played, loop back to the first song
             songIndex = 0;
-            playNextSong();
+            //playNextSong();
         }
     }
 
@@ -492,13 +495,10 @@ public class MainWindowController {
     }
 
     public void addSelectedSongToPlaylist(){
-        if (songListView != null && selectedPlaylist != null){
-            String selectedSong = songListView.getSelectionModel().getSelectedItems().toString();
-            System.out.println(selectedPlaylist.getName().getValue());
-            if (selectedSong != null) {
-                //selectedPlaylist.addSong(selectedSong);
-                updateSongsInPlaylist();
-            }
+        Integer PlaylistId = playlistList.getSelectionModel().getSelectedItem().getId().get();
+        Integer SongsId = songTableView.getSelectionModel().getSelectedItem().songIdProperty().get();
+        if(PlaylistId != null && SongsId != null){
+            playlistManager.CreateSongsOfPlaylist(PlaylistId, SongsId);
         }
     }
 
@@ -521,6 +521,13 @@ public class MainWindowController {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void songsInPlayList(MouseEvent mouseEvent) {
+        songsInPlaylist.getItems().clear();
+        for(Song s : playlistManager.getAllSongsOfPlaylist(playlistList.getSelectionModel().getSelectedItem().getId().get())){
+            songsInPlaylist.getItems().add(s);
         }
     }
 }

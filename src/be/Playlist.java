@@ -25,6 +25,12 @@ public class Playlist {
         this.time = new SimpleStringProperty(time);
     }
 
+    public Playlist(int id, String name, String time){
+        this.id = new SimpleIntegerProperty(id);
+        this.name = new SimpleStringProperty(name);
+        this.time = new SimpleStringProperty(time);
+    }
+
     public Playlist(String name, String time, String songs){
         this.name = new SimpleStringProperty(name);
         this.time = new SimpleStringProperty(time);

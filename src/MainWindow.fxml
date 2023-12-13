@@ -24,7 +24,7 @@
       <TextFlow fx:id="songTextFlow" layoutX="267.0" layoutY="10.0" prefHeight="76.0" prefWidth="493.0" />
       <ListView fx:id="songListView" layoutX="213.0" layoutY="198.0" prefHeight="200.0" prefWidth="559.0" />
       <Button fx:id="addSongsBtn" layoutX="219.0" layoutY="157.0" mnemonicParsing="false" onAction="#clickAddSongsBtn" text="Add song to library" />
-      <TableView fx:id="playlistList" layoutX="19.0" layoutY="156.0" prefHeight="455.0" prefWidth="191.0">
+      <TableView fx:id="playlistList" layoutX="19.0" layoutY="156.0" prefHeight="455.0" prefWidth="191.0" onMouseClicked="#songsInPlayList">
          <columns>
             <TableColumn fx:id="playlistName" prefWidth="72.5" text="Tittle" />
             <TableColumn fx:id="songs" prefWidth="73.0" text="Songs" />
@@ -53,7 +53,14 @@
             <TableColumn fx:id="timeColumn" prefWidth="60.0" text="Time" />
          </columns>
       </TableView>
-      <ListView fx:id="songsInPlaylist" layoutX="222.0" layoutY="458.0" prefHeight="147.0" prefWidth="542.0" />
+      <TableView fx:id="songsInPlaylist" layoutX="222.0" layoutY="458.0" prefHeight="147.0" prefWidth="542.0">
+      <columns>
+         <TableColumn fx:id="titleCol" prefWidth="274.0" text="Title" />
+         <TableColumn fx:id="artistCol" prefWidth="137.0" text="Artist" />
+         <TableColumn fx:id="genreCol" prefWidth="86.0" text="Genre" />
+         <TableColumn fx:id="timeCol" prefWidth="60.0" text="Time" />
+      </columns>
+   </TableView>
       <Button fx:id="btnDeletePlaylist" layoutX="146.0" layoutY="120.0" mnemonicParsing="false" onAction="#openDeletePlaylistWindow" text="Delete" />
    </children>
 </AnchorPane>

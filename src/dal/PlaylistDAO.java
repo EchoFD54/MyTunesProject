@@ -77,14 +77,59 @@ public class PlaylistDAO implements IPlaylistDAO {
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             while(rs.next()){
-                //int id          = rs.getInt("PlaylistId");
+                int id          = rs.getInt("PlaylistId");
                 String name    = rs.getString("Name");
                 String time   = rs.getString("Time");
 
-                Playlist p = new Playlist(name, time);
+                Playlist p = new Playlist(id, name, time);
                 playlists.add(p);
             }
             return playlists;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<Song> CreateSongsOfPlaylist(int PlaylistId, int SongsId) {
+        try(Connection con = cm.getConnection())
+        {
+            String sql = "INSERT INTO songInPlaylist(playlistid, songsid) VALUES (?,?)";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, PlaylistId);
+            pstmt.setInt(2, SongsId);
+            pstmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<Song> getAllSongsOfPlaylist(int PlaylistId) {
+        List<Song> SongsInPlaylist = new ArrayList<>();
+        try(Connection con = cm.getConnection())
+        {
+            String sql = "select *\n" +
+                    "from Songs s\n" +
+                    "inner join songInPlaylist sp on s.SongsId = sp.SongsId\n" +
+                    "where PlaylistId = (?)";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, PlaylistId);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                int id            = rs.getInt("SongsId");
+                String title      = rs.getString("Title");
+                String artist     = rs.getString("Artist");
+                String genre      = rs.getString("Genre");
+                String time       = rs.getString("Time");
+                String filePath   = rs.getString("FilePath");
+
+                Song s = new Song(id,title, artist, genre, time, filePath);
+                SongsInPlaylist.add(s);
+            }
+            return SongsInPlaylist;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
