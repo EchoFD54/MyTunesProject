@@ -56,6 +56,8 @@ public class MainWindowController {
     @FXML
     public TableView<Song> songsInPlaylist;
     @FXML
+    public Button delBtn;
+    @FXML
     private ListView<String> songListView;
     @FXML
     private MediaView mediaView;
@@ -410,6 +412,54 @@ public class MainWindowController {
 
 
     public void clickDeleteBtn(ActionEvent actionEvent) {
+        // Check if a song is selected in the TableView
+        Song selectedSong = songTableView.getSelectionModel().getSelectedItem();
+
+        if (selectedSong != null) {
+            // Display a confirmation dialog
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirm Deletion");
+            alert.setHeaderText("Are you sure you want to delete the selected song?");
+            alert.setContentText("This action cannot be undone.");
+
+            // Handle the users response
+            alert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    // User clicked OK, delete the songf
+                    int selectedIndex = songTableView.getSelectionModel().getSelectedIndex();
+
+                    // Remove the song from the TableView and songList
+                    songTableView.getItems().remove(selectedIndex);
+                    songList.remove(selectedIndex);
+
+                    // Stop the current song if it is the one being deleted
+                    if (mediaPlayer != null && mediaPlayer.getMedia().getSource().equals(selectedSong.getFilePath())) {
+                        mediaPlayer.stop();
+                        mediaPlayer.dispose();
+                    }
+
+                    // Reset the MediaPlayer and MediaView if the song being deleted is the current one
+                    if (songIndex == selectedIndex) {
+                        mediaPlayer = null;
+                        mediaView.setMediaPlayer(null);
+                    }
+
+                    // Reset the current song name
+                    currentSongName = "";
+
+                    // Update the TextFlow with the current song name
+                    updateTextFlow();
+                }
+            });
+        } else {
+            // Show a message saying that no song is selected
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No Song Selected");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a song from the playlist to delete.");
+            alert.showAndWait();
+        }
+
         Song s = songTableView.getSelectionModel().getSelectedItem();
         songManager.deleteSong(s.songIdProperty().get());
     }
