@@ -88,9 +88,13 @@ public class MainWindowController {
         genreColumn.setCellValueFactory(cellData -> cellData.getValue().genreProperty());
         timeColumn.setCellValueFactory(cellData -> cellData.getValue().timeProperty());
 
-        // Shows all songs saved on the Database
+        // Show all songs saved on the Database
         for(Song s : songManager.getAllSongs()){
             songTableView.getItems().add(s);
+            // Add all saved songs into songList (to be able to play them)
+            if (!songList.contains(s)) {
+                songList.add(new Media(new File(s.getFilePath()).toURI().toString()));
+            }
         }
 
         // Set up the columns in the TableView
@@ -429,8 +433,7 @@ public class MainWindowController {
                     // Remove the song from the Database, TableView and songList
                     songManager.deleteSong(selectedSong.songIdProperty().getValue());
                     songTableView.getItems().remove(selectedIndex);
-                    songList.remove(selectedIndex);
-
+                    songList.remove(selectedSong);
 
 
                     // Stop the current song if it is the one being deleted
