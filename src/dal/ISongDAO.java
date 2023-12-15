@@ -25,10 +25,4 @@ public interface ISongDAO {
      * @return a list of all Songs saved on the Database
      */
     public List<Song> getAllSongs();
-
-    /**
-     * @return a list of all Songs saved on the Database of a specific Playlist
-     */
-    public List<Song> getSongsFromPlaylist(int playlistId);
-
 }

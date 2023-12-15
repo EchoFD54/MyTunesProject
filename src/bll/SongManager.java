@@ -39,13 +39,4 @@ public class SongManager {
         return songDAO.getAllSongs();
     }
 
-    /**
-     * @return a list of all Songs saved on the Database of a specific Playlist
-     */
-    /*
-    public List<Song> getSongsFromPlaylist(Playlist playlist) {
-        return petDAO.getPetsFromOwner(selected.getId());
-    }
-     */
-
 }
