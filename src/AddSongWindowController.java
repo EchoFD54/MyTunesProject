@@ -41,12 +41,6 @@ public class AddSongWindowController {
         // Update the song properties in the MainWindowController
         mainWindowController.updateSongProperties(title, artist, genre, formattedTime, filePath);
 
-
-        Song s = new Song(title, artist, genre, "0:00", filePath);
-        songManager.createSong(s);
-
-
-
         // Close the AddSongWindow
         ((Stage) titleField.getScene().getWindow()).close();
     }
