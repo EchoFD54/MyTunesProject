@@ -17,10 +17,14 @@ public class SongDAO implements ISongDAO {
     public void deleteSong(int songId) {
         try(Connection con = cm.getConnection())
         {
-            String sql = "DELETE FROM Songs WHERE SongId=?";
+            String sql = "DELETE FROM songInPlaylist WHERE SongsId=?";
+            String sql1 = "DELETE FROM Songs WHERE SongsId=?";
             PreparedStatement pstmt = con.prepareStatement(sql);
+            PreparedStatement pstmt1 = con.prepareStatement(sql1);
             pstmt.setInt(1, songId);
             pstmt.execute();
+            pstmt1.setInt(1, songId);
+            pstmt1.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -34,7 +38,7 @@ public class SongDAO implements ISongDAO {
     public void updateSong(Song s) {
         try(Connection con = cm.getConnection())
         {
-            String sql = "UPDATE Songs SET Title=?, Artist=?, Genre=? WHERE SongId=?";
+            String sql = "UPDATE Songs SET Title=?, Artist=?, Genre=? WHERE SongsId=?";
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setString(1, s.titleProperty().get());
             pstmt.setString(2, s.artistProperty().get());
@@ -48,7 +52,7 @@ public class SongDAO implements ISongDAO {
 
     /**
      * Creates a Song on the Database
-     * Values to create: Title, Artist, Genre, Time (automatically added) and FilePath
+     * Values to add: Title, Artist, Genre, Time and FilePath
      */
     @Override
     public void createSong(Song s) {
@@ -88,36 +92,6 @@ public class SongDAO implements ISongDAO {
                 String filePath   = rs.getString("FilePath");
 
                 Song s = new Song(id,title, artist, genre, time, filePath);
-                songs.add(s);
-            }
-            return songs;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * @return a list of all Songs saved on the Database of a specific Playlist
-     */
-    @Override
-    public List<Song> getSongsFromPlaylist(int playlistId) {
-        List<Song> songs = new ArrayList<>();
-
-        try(Connection con = cm.getConnection())
-        {
-            String sql = "SELECT * FROM Songs WHERE PlaylistId=?";
-            PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, playlistId);
-            ResultSet rs = pstmt.executeQuery();
-            while(rs.next()){
-                int id            = rs.getInt("SongId");
-                String title      = rs.getString("Title");
-                String artist     = rs.getString("Artist");
-                String genre      = rs.getString("Genre");
-                String time       = rs.getString("Time");
-                String filePath   = rs.getString("FilePath");
-
-                Song s = new Song(title, artist, genre, time, filePath);
                 songs.add(s);
             }
             return songs;

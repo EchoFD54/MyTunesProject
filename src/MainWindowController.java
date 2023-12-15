@@ -350,10 +350,6 @@ public class MainWindowController {
         }
     }
 
-    private Song createSongFromMediaFile(File file) {
-        return new Song(file.getName(), "Unknown Artist", "Unknown Genre", "0:00");
-    }
-
     public void updateSongProperties(String title, String artist, String genre, String time, String filePath) {
         // Check if the song is already in the TableView
         boolean songExists = false;
@@ -367,6 +363,7 @@ public class MainWindowController {
                 existingSong.setArtist(artist);
                 existingSong.setGenre(genre);
                 existingSong.setTime(time);
+                songManager.updateSong(existingSong);
                 songExists = true;
                 break;
             }
@@ -376,6 +373,7 @@ public class MainWindowController {
         if (!songExists) {
             // Create a new Song object with the actual time
             Song newSong = new Song(title, artist, genre, time, filePath);
+            songManager.createSong(newSong);
 
             // Add the newMedia to the songList
             songList.add(new Media(new File(filePath).toURI().toString()));
@@ -428,9 +426,12 @@ public class MainWindowController {
                     // User clicked OK, delete the songf
                     int selectedIndex = songTableView.getSelectionModel().getSelectedIndex();
 
-                    // Remove the song from the TableView and songList
+                    // Remove the song from the Database, TableView and songList
+                    songManager.deleteSong(selectedSong.songIdProperty().getValue());
                     songTableView.getItems().remove(selectedIndex);
                     songList.remove(selectedIndex);
+
+
 
                     // Stop the current song if it is the one being deleted
                     if (mediaPlayer != null && mediaPlayer.getMedia().getSource().equals(selectedSong.getFilePath())) {
@@ -460,8 +461,6 @@ public class MainWindowController {
             alert.showAndWait();
         }
 
-        Song s = songTableView.getSelectionModel().getSelectedItem();
-        songManager.deleteSong(s.songIdProperty().get());
     }
 
     public void clickEditBtn(ActionEvent actionEvent) {
@@ -507,11 +506,8 @@ public class MainWindowController {
             alert.setContentText("Please select a song from the playlist to edit.");
             alert.showAndWait();
         }
-
-        Song s = new Song("Memo", "Totest", "Crazy");
-        if(!songTableView.getSelectionModel().getSelectedItem().equals(s))
-            songManager.updateSong(s);
     }
+
     @FXML
     private void openDeletePlaylistWindow(){
         int selectedPlayListId = playlistList.getSelectionModel().getSelectedIndex();
