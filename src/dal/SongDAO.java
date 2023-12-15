@@ -11,7 +11,7 @@ public class SongDAO implements ISongDAO {
     private final ConnectionManager cm = new ConnectionManager();
 
     /**
-     * Deletes a Song on the Database by the ID
+     * Deletes a Song on the Database (on table Songs and songInPlaylist) by the ID
      */
     @Override
     public void deleteSong(int songId) {
