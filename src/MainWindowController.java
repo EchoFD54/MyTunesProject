@@ -58,6 +58,10 @@ public class MainWindowController {
     @FXML
     public Button delBtn;
     @FXML
+    public TextField searchField;
+    @FXML
+    public Button filterBtn;
+    @FXML
     private ListView<String> songListView;
     @FXML
     private MediaView mediaView;
@@ -142,9 +146,6 @@ public class MainWindowController {
 
         timerLabel.setText("0:00");
         playNextSong();
-
-
-
     }
 
 
@@ -177,7 +178,7 @@ public class MainWindowController {
                 Song currentSong = songTableView.getItems().get(songIndex);
                 currentSong.setTime(formattedTime);
 
-                // Update the TextFlow with the current song name
+                // Update the TextFlow with the current song's name
                 updateTextFlow();
             });
 
@@ -337,14 +338,8 @@ public class MainWindowController {
         Parent root;
         try {
             root = loader.load();
-
-            // Get the controller instance
             AddSongWindowController addSongController = loader.getController();
-
-            // Pass the reference of MainWindowController to AddSongWindowController
             addSongController.setMainWindowController(this);
-
-            // Create a new stage for the AddSongWindow
             Stage stage = new Stage();
             stage.setTitle("Add/Edit Song");
             stage.setScene(new Scene(root));
@@ -359,9 +354,9 @@ public class MainWindowController {
         boolean songExists = false;
         Song existingSong = null;
 
+        // Modify existing song's properties
         for (Song song : songTableView.getItems()) {
             if (song.getFilePath().equals(filePath)) {
-                // Modify existing song's properties
                 existingSong = song;
                 existingSong.setTitle(title);
                 existingSong.setArtist(artist);
@@ -375,14 +370,11 @@ public class MainWindowController {
 
         // If the song is not in the TableView, add a new one
         if (!songExists) {
-            // Create a new Song object with the actual time
             Song newSong = new Song(title, artist, genre, time, filePath);
             songManager.createSong(newSong);
 
-            // Add the newMedia to the songList
             songList.add(new Media(new File(filePath).toURI().toString()));
 
-            // Add the newSong to the TableView
             songTableView.getItems().add(newSong);
         }
 
@@ -391,13 +383,9 @@ public class MainWindowController {
             playNextSong();
         }
 
-        // Set the current song name
         currentSongName = title;
-
-        // Update the TextFlow with the current song name
         updateTextFlow();
 
-        // Close the AddSongWindow
         if (addSongController != null) {
             addSongController.closeAddSongWindow();
         }
@@ -418,7 +406,6 @@ public class MainWindowController {
         Song selectedSong = songTableView.getSelectionModel().getSelectedItem();
 
         if (selectedSong != null) {
-            // Display a confirmation dialog
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirm Deletion");
             alert.setHeaderText("Are you sure you want to delete the selected song?");
@@ -477,10 +464,8 @@ public class MainWindowController {
             try {
                 root = loader.load();
 
-                // Get the controller instance
                 AddSongWindowController addSongController = loader.getController();
 
-                // Pass the reference of MainWindowController to AddSongWindowController
                 addSongController.setMainWindowController(this);
 
                 // Set the fields in AddSongWindowController with the selected song's properties
@@ -494,7 +479,6 @@ public class MainWindowController {
                 stage.setTitle("Edit Song");
                 stage.setScene(new Scene(root));
 
-                // Set the stage to AddSongWindowController
                 addSongController.setStage(stage);
 
                 stage.show();
