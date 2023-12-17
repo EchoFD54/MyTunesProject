@@ -1,4 +1,3 @@
-
 import be.Playlist;
 import be.Song;
 import bll.PlaylistManager;
@@ -58,9 +57,9 @@ public class MainWindowController {
     @FXML
     public Button delBtn;
     @FXML
-    public TextField searchField;
-    @FXML
     public Button filterBtn;
+    @FXML
+    public TextField filterTextField;
     @FXML
     private ListView<String> songListView;
     @FXML
@@ -77,6 +76,7 @@ public class MainWindowController {
 
     SongManager songManager = new SongManager();
     PlaylistManager playlistManager = new PlaylistManager();
+    private boolean isFilterActive = false;
 
 
     public void initialize() {
@@ -140,6 +140,12 @@ public class MainWindowController {
         // Set the event handler for the addSongsBtn button
         addSongsBtn.setOnAction(this::clickAddSongsBtn);
 
+        filterTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.isEmpty()) {
+                clearFilter();
+            }
+        });
+
         if (songList.isEmpty()) {
             return;
         }
@@ -192,7 +198,7 @@ public class MainWindowController {
         } else {
             // All songs have been played, loop back to the first song
             songIndex = 0;
-            //playNextSong();
+            playNextSong();
         }
     }
 
@@ -583,5 +589,40 @@ public class MainWindowController {
             songsInPlaylist.getSelectionModel().select(selectedIndex + 1);
         }
     }
+
+    public void toggleFilterBtn(ActionEvent actionEvent) {
+        if (isFilterActive) {
+            clearFilter();
+        } else {
+            applyFilter();
+        }
+    }
+
+    private void applyFilter() {
+        String filterQuery = filterTextField.getText().toLowerCase();
+        ObservableList<Song> filteredSongs = FXCollections.observableArrayList();
+
+        for (Song song : songManager.getAllSongs()) {
+            if (song.titleProperty().get().toLowerCase().contains(filterQuery) || song.artistProperty().get().toLowerCase().contains(filterQuery)) {
+                filteredSongs.add(song);
+            }
+        }
+        
+        songTableView.setItems(filteredSongs);
+
+        filterBtn.setText("Clear");
+        isFilterActive = true;
+    }
+
+    private void clearFilter() {
+        songTableView.setItems(FXCollections.observableArrayList(songManager.getAllSongs()));
+
+        filterTextField.clear();
+
+        filterBtn.setText("Filter");
+        isFilterActive = false;
+    }
+
+
 }
 
