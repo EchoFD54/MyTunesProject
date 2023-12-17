@@ -133,6 +133,8 @@ public class MainWindowController {
             int selectedSongIndex = songTableView.getSelectionModel().getSelectedIndex();
             if (selectedSongIndex >= 0) {
                 songIndex = selectedSongIndex;
+                currentSongName = newValue.titleProperty().get();
+                updateTextFlow();
                 playNextSong();
             }
         });
@@ -180,11 +182,10 @@ public class MainWindowController {
                 Duration duration = newMediaPlayer.getMedia().getDuration();
                 String formattedTime = formatDuration(duration);
 
-                // Update the current song's duration in the TableView
+                // Update the current song's duration in the TableView and the songs title
                 Song currentSong = songTableView.getItems().get(songIndex);
                 currentSong.setTime(formattedTime);
-
-                // Update the TextFlow with the current song's name
+                currentSongName = currentSong.titleProperty().get();
                 updateTextFlow();
             });
 
