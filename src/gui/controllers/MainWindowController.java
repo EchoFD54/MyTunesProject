@@ -5,6 +5,7 @@ import be.Song;
 import bll.PlaylistManager;
 import bll.SongManager;
 
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -81,6 +82,7 @@ public class MainWindowController {
 
     public void initialize() {
         setSongsTableView();
+        setUpPlaylistTableView();
 
         // Show all songs saved on the Database
         for(Song s : songManager.getAllSongs()){
@@ -90,16 +92,6 @@ public class MainWindowController {
                 songList.add(new Media(new File(s.getFilePath()).toURI().toString()));
             }
         }
-
-        // Set up the columns in the TableView
-        TableColumn<Playlist, String> playlistName = (TableColumn<Playlist, String>) playlistList.getColumns().get(0);
-        TableColumn<Playlist, String> songs = (TableColumn<Playlist, String>) playlistList.getColumns().get(1);
-        TableColumn<Playlist, String> time = (TableColumn<Playlist, String>) playlistList.getColumns().get(2);
-
-        // Define cell value factories for each column
-        playlistName.setCellValueFactory(cellData -> cellData.getValue().getName());
-        songs.setCellValueFactory(cellData -> cellData.getValue().getSongs());
-        time.setCellValueFactory(cellData -> cellData.getValue().getTime());
 
         // Set up the columns in the TableView
         TableColumn<Song, String> titleCol = (TableColumn<Song, String>) songsInPlaylist.getColumns().get(0);
@@ -307,7 +299,7 @@ public class MainWindowController {
     @FXML
     public void clickAddSongsBtn(ActionEvent actionEvent) {
         // Open the AddSongWindowController
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("AddSongWindow.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/views/AddSongWindow.fxml"));
         Parent root;
         try {
             root = loader.load();
@@ -394,6 +386,7 @@ public class MainWindowController {
                     songManager.deleteSong(selectedSong.songIdProperty().getValue());
                     songTableView.getItems().remove(selectedIndex);
                     songList.remove(selectedSong);
+                    refreshPlaylistTableView();
 
 
                     // Stop the current song if it is the one being deleted
@@ -506,6 +499,7 @@ public class MainWindowController {
         if(PlaylistId != null && SongsId != null){
             playlistManager.CreateSongsOfPlaylist(PlaylistId, SongsId);
         }
+        refreshPlaylistTableView();
     }
 
     @FXML
@@ -641,6 +635,36 @@ public class MainWindowController {
         playNextSong();
 
     }
+
+    private int numberSongsInPlaylist(int playlistId){
+        if(playlistId > 0){
+            return playlistManager.getAllSongsOfPlaylist(playlistId).size();
+        }
+        else return -1;
+    }
+
+    private void setUpPlaylistTableView(){
+        // Set up the columns in the TableView
+        TableColumn<Playlist, String> playlistName = (TableColumn<Playlist, String>) playlistList.getColumns().get(0);
+        TableColumn<Playlist, Integer> songs = (TableColumn<Playlist, Integer>) playlistList.getColumns().get(1);
+        TableColumn<Playlist, String> time = (TableColumn<Playlist, String>) playlistList.getColumns().get(2);
+
+        // Define cell value factories for each column
+        playlistName.setCellValueFactory(cellData -> cellData.getValue().getName());
+        songs.setCellValueFactory(cellData -> {
+            int playlistId = cellData.getValue().getId().get();
+            int totalSongs = numberSongsInPlaylist(playlistId);
+            return new SimpleIntegerProperty(totalSongs).asObject();
+        });
+        time.setCellValueFactory(cellData -> cellData.getValue().getTime());
+    }
+
+    private void refreshPlaylistTableView() {
+        playlistList.getItems().clear();
+        playlistList.getItems().addAll(playlistManager.getAllPlaylists());
+    }
+
+
 
 }
 
