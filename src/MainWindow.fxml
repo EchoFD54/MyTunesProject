@@ -20,7 +20,7 @@
       <Slider fx:id="songProgress" layoutX="213.0" layoutY="88.0" prefHeight="18.0" prefWidth="559.0" />
       <Button fx:id="nextBtn" layoutX="598.0" layoutY="416.0" mnemonicParsing="false" onAction="#clickNextSong" text="Next" />
       <Button fx:id="previousBtn" layoutX="333.0" layoutY="416.0" mnemonicParsing="false" onAction="#clickPreviousSong" text="Previous" />
-      <Label fx:id="timerLabel" layoutX="213.0" layoutY="54.0" text="Label" />
+      <Label fx:id="timerLabel" layoutX="213.0" layoutY="54.0" text="00:00" />
       <TextFlow fx:id="songTextFlow" layoutX="267.0" layoutY="10.0" prefHeight="76.0" prefWidth="493.0" />
       <ListView fx:id="songListView" layoutX="213.0" layoutY="198.0" prefHeight="200.0" prefWidth="559.0" />
       <Button fx:id="addSongsBtn" layoutX="219.0" layoutY="157.0" mnemonicParsing="false" onAction="#clickAddSongsBtn" text="Add song to library" />
@@ -34,7 +34,7 @@
       <Label layoutX="101.0" layoutY="87.0" prefHeight="21.0" prefWidth="65.0" text="Playlists" />
       <Button fx:id="editBtn" layoutX="380.0" layoutY="157.0" mnemonicParsing="false" onAction="#clickEditBtn" text="Edit Song" />
       <Button fx:id="delBtn" layoutX="477.0" layoutY="157.0" mnemonicParsing="false" onAction="#clickDeleteBtn" text="Delete Song" />
-      <Button layoutX="672.0" layoutY="416.0" mnemonicParsing="false" onAction="#addSelectedSongToPlaylist" text="Add to Playlist" />
+      <Button layoutX="664.0" layoutY="416.0" mnemonicParsing="false" onAction="#addSelectedSongToPlaylist" text="Add to Playlist" />
       <Button layoutX="19.0" layoutY="119.0" mnemonicParsing="false" onAction="#openNewPlaylistWindow" text="New" />
       <Button layoutX="87.0" layoutY="120.0" mnemonicParsing="false" onAction="#openEditPlaylistWindow" text="Edit" />
       <TableView fx:id="songTableView" layoutX="213.0" layoutY="198.0" prefHeight="200.0" prefWidth="559.0">

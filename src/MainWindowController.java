@@ -4,7 +4,6 @@ import bll.PlaylistManager;
 import bll.SongManager;
 import dal.ISongDAO;
 import dal.SongDAO;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -29,21 +28,21 @@ import java.util.List;
 
 public class MainWindowController {
     @FXML
-    public Slider volumeSlider;
+    private Slider volumeSlider;
     @FXML
-    public Button playBtn;
+    private Button playBtn;
     @FXML
-    public Slider songProgress;
+    private Slider songProgress;
     @FXML
-    public Button nextBtn;
+    private Button nextBtn;
     @FXML
-    public Button previousBtn;
+    private Button previousBtn;
     @FXML
-    public Label timerLabel;
+    private Label timerLabel;
     @FXML
-    public TextFlow songTextFlow;
+    private TextFlow songTextFlow;
     @FXML
-    public Button addSongsBtn;
+    private Button addSongsBtn;
     @FXML
     public TableView<Song> songTableView;
     @FXML
@@ -51,15 +50,15 @@ public class MainWindowController {
     @FXML
     public TableColumn titleColumn,artistColumn,genreColumn,timeColumn,playlistName,songs,time, titleCol, artistCol, genreCol, timeCol;
     @FXML
-    public Button editBtn;
+    private Button editBtn;
     @FXML
     public TableView<Song> songsInPlaylist;
     @FXML
-    public Button delBtn;
+    private Button delBtn;
     @FXML
-    public Button filterBtn;
+    private Button filterBtn;
     @FXML
-    public TextField filterTextField;
+    private TextField filterTextField;
     @FXML
     private ListView<String> songListView;
     @FXML
@@ -73,31 +72,20 @@ public class MainWindowController {
     private boolean canPlaySong = false;
     private String currentSongName = "";
     private AddSongWindowController addSongController;
-
     SongManager songManager = new SongManager();
     PlaylistManager playlistManager = new PlaylistManager();
     private boolean isFilterActive = false;
 
 
     public void initialize() {
-        // Set up the columns in the TableView
-        TableColumn<Song, String> titleColumn = (TableColumn<Song, String>) songTableView.getColumns().get(0);
-        TableColumn<Song, String> artistColumn = (TableColumn<Song, String>) songTableView.getColumns().get(1);
-        TableColumn<Song, String> genreColumn = (TableColumn<Song, String>) songTableView.getColumns().get(2);
-        TableColumn<Song, String> timeColumn = (TableColumn<Song, String>) songTableView.getColumns().get(3);
-
-        // Define cell value factories for each column
-        titleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
-        artistColumn.setCellValueFactory(cellData -> cellData.getValue().artistProperty());
-        genreColumn.setCellValueFactory(cellData -> cellData.getValue().genreProperty());
-        timeColumn.setCellValueFactory(cellData -> cellData.getValue().timeProperty());
+        setUpSongTableView();
 
         // Show all songs saved on the Database
         for(Song s : songManager.getAllSongs()){
             songTableView.getItems().add(s);
             // Add all saved songs into songList (to be able to play them)
             if (!songList.contains(s)) {
-                songList.add(new Media(new File(s.getFilePath()).toURI().toString()));
+              songList.add(new Media(new File(s.getFilePath()).toURI().toString()));
             }
         }
 
@@ -128,32 +116,7 @@ public class MainWindowController {
             playlistList.getItems().add(p);
         }
 
-        // Set a listener for handling song selection
-        songTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            int selectedSongIndex = songTableView.getSelectionModel().getSelectedIndex();
-            if (selectedSongIndex >= 0) {
-                songIndex = selectedSongIndex;
-                currentSongName = newValue.titleProperty().get();
-                updateTextFlow();
-                playNextSong();
-            }
-        });
-
-        // Set the event handler for the addSongsBtn button
-        addSongsBtn.setOnAction(this::clickAddSongsBtn);
-
-        filterTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.isEmpty()) {
-                clearFilter();
-            }
-        });
-
-        if (songList.isEmpty()) {
-            return;
-        }
-
-        timerLabel.setText("0:00");
-        playNextSong();
+        setListenerAndButton();
     }
 
 
@@ -177,12 +140,10 @@ public class MainWindowController {
                 playNextSong();
             });
 
-            // Set up the ready event handler to update the duration
+            // Update the current song's duration in the TableView and the songs title
             newMediaPlayer.setOnReady(() -> {
                 Duration duration = newMediaPlayer.getMedia().getDuration();
                 String formattedTime = formatDuration(duration);
-
-                // Update the current song's duration in the TableView and the songs title
                 Song currentSong = songTableView.getItems().get(songIndex);
                 currentSong.setTime(formattedTime);
                 currentSongName = currentSong.titleProperty().get();
@@ -193,7 +154,6 @@ public class MainWindowController {
             mediaView.setMediaPlayer(mediaPlayer);
             setSongProgress();
             setVolumeSlider();
-
             playCurrentSong();
             updateTimeLabel();
         } else {
@@ -441,11 +401,8 @@ public class MainWindowController {
                         mediaPlayer = null;
                         mediaView.setMediaPlayer(null);
                     }
-
-                    // Reset the current song name
-                    currentSongName = "";
-
                     // Update the TextFlow with the current song name
+                    currentSongName = "";
                     updateTextFlow();
                 }
             });
@@ -624,6 +581,48 @@ public class MainWindowController {
         isFilterActive = false;
     }
 
+    private void setUpSongTableView(){
+        // Set up the columns in the TableView
+        TableColumn<Song, String> titleColumn = (TableColumn<Song, String>) songTableView.getColumns().get(0);
+        TableColumn<Song, String> artistColumn = (TableColumn<Song, String>) songTableView.getColumns().get(1);
+        TableColumn<Song, String> genreColumn = (TableColumn<Song, String>) songTableView.getColumns().get(2);
+        TableColumn<Song, String> timeColumn = (TableColumn<Song, String>) songTableView.getColumns().get(3);
 
+        // Define cell value factories for each column
+        titleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
+        artistColumn.setCellValueFactory(cellData -> cellData.getValue().artistProperty());
+        genreColumn.setCellValueFactory(cellData -> cellData.getValue().genreProperty());
+        timeColumn.setCellValueFactory(cellData -> cellData.getValue().timeProperty());
+    }
+
+
+    private void setListenerAndButton(){
+        // Set a listener for handling song selection
+        songTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            int selectedSongIndex = songTableView.getSelectionModel().getSelectedIndex();
+            if (selectedSongIndex >= 0) {
+                songIndex = selectedSongIndex;
+                currentSongName = newValue.titleProperty().get();
+                updateTextFlow();
+                playNextSong();
+            }
+        });
+
+        // Set the event handler for the addSongsBtn button
+        addSongsBtn.setOnAction(this::clickAddSongsBtn);
+
+        filterTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.isEmpty()) {
+                clearFilter();
+            }
+        });
+
+        if (songList.isEmpty()) {
+            return;
+        }
+
+        timerLabel.setText("0:00");
+        playNextSong();
+
+    }
 }
-
