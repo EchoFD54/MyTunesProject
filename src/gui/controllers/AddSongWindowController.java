@@ -1,8 +1,6 @@
-import be.Song;
-import bll.PlaylistManager;
+package gui.controllers;
+
 import bll.SongManager;
-import dal.ISongDAO;
-import dal.SongDAO;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextField;

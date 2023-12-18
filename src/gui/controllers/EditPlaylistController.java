@@ -1,3 +1,5 @@
+package gui.controllers;
+
 import be.Playlist;
 import bll.PlaylistManager;
 import javafx.fxml.FXML;

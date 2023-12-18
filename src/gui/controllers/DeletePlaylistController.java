@@ -1,3 +1,5 @@
+package gui.controllers;
+
 import bll.PlaylistManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

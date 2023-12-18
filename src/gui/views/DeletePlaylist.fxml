@@ -4,7 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="200.0" prefWidth="390.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="DeletePlaylistController">
+<AnchorPane prefHeight="200.0" prefWidth="390.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.DeletePlaylistController">
     <children>
         <Label layoutX="77.0" layoutY="76.0" text="Are you sure you want to delete this playlist?" />
         <Button fx:id="btnCancel" layoutX="118.0" layoutY="122.0" mnemonicParsing="false" onAction="#cancelAction" text="Cancel" />

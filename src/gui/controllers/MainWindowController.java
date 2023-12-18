@@ -1,9 +1,9 @@
+package gui.controllers;
+
 import be.Playlist;
 import be.Song;
 import bll.PlaylistManager;
 import bll.SongManager;
-import dal.ISongDAO;
-import dal.SongDAO;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
