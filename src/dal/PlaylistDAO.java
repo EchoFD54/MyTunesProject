@@ -134,4 +134,29 @@ public class PlaylistDAO implements IPlaylistDAO {
             throw new RuntimeException(e);
         }
     }
+
+    public Playlist getPlaylistById(int playlistId){
+        try(Connection con = cm.getConnection())
+        {
+            String sql = "SELECT * FROM Playlist WHERE PlaylistId=?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, playlistId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()){
+                int id          = rs.getInt("PlaylistId");
+                String name     = rs.getString("Name");
+                String time     = rs.getString("Time");
+
+                return new Playlist(id, name, time);
+            }
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    @Override
+    public void updatePlaylist(Playlist playlist) {
+
+    }
 }

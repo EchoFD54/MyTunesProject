@@ -33,4 +33,8 @@ public interface IPlaylistDAO {
     public List<Song> CreateSongsOfPlaylist(int PlaylistId, int SongsId);
 
     public List<Song> getAllSongsOfPlaylist(int PlaylistId);
+
+    Playlist getPlaylistById(int playlistId);
+
+    void updatePlaylist(Playlist playlist);
 }

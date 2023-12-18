@@ -624,5 +624,14 @@ public class MainWindowController {
     }
 
 
+    @FXML
+    private void deleteSongFromPlaylist(ActionEvent actionEvent){
+        Song selectedSong = songsInPlaylist.getSelectionModel().getSelectedItem();
+        if (selectedSong != null){
+            Playlist selectedPlaylist = playlistList.getSelectionModel().getSelectedItem();
+            playlistManager.removeSongFromPlaylist(selectedPlaylist.getId().get(), selectedSong.getSongId());
+            songsInPlaylist.getItems().remove(selectedSong);
+        }
+    }
 }
 

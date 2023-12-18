@@ -42,12 +42,21 @@ public class PlaylistManager {
     public List<Playlist> getAllPlaylists() {
         return playlistDAO.getAllPlaylists();
     }
+
     public List<Song> CreateSongsOfPlaylist(int PlaylistId, int SongsId){
         return playlistDAO.CreateSongsOfPlaylist(PlaylistId, SongsId);
     }
 
     public List<Song> getAllSongsOfPlaylist(int PlaylistId){
         return playlistDAO.getAllSongsOfPlaylist(PlaylistId);
+    }
+
+    public void removeSongFromPlaylist(int playlistId, int songId){
+        List<Song> songsInPlaylist = getAllSongsOfPlaylist(playlistId);
+        songsInPlaylist.removeIf(song -> song.getSongId() == songId);
+        Playlist playlist = playlistDAO.getPlaylistById(playlistId);
+        playlist.setSongs(songsInPlaylist.toString());
+        playlistDAO.updatePlaylist(playlist);
     }
 
 }

@@ -96,4 +96,8 @@ public class Song {
                 ", time=" + time.get() +
                 '}';
     }
+
+    public int getSongId(){
+        return songId.get();
+    }
 }
