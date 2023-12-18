@@ -70,7 +70,6 @@ public class AddSongWindowController {
         this.stage = stage;
     }
 
-    // method to close the window
     public void closeAddSongWindow() {
         if (stage != null) {
             stage.close();
