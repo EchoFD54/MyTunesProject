@@ -35,10 +35,12 @@ public class EditPlaylistController {
             }
         }
     }
+
     private void closeEditedWindow(){
         Stage stage = (Stage) editPlaylistNameField.getScene().getWindow();
         stage.close();
     }
+
     @FXML
     public void cancelAction(){
         closeEditedWindow();

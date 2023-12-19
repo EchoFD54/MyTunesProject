@@ -12,8 +12,6 @@ public class Playlist {
     private StringProperty time;
     private StringProperty songs;
 
-
-
     public Playlist(String name){
         this.name = new SimpleStringProperty(name);
     }

@@ -1,7 +1,5 @@
 package gui.controllers;
 
-import bll.SongManager;
-
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextField;
 import javafx.scene.media.Media;
@@ -18,8 +16,6 @@ public class AddSongWindowController {
     public TextField titleField;
     private MainWindowController mainWindowController;
     private Stage stage;
-
-    SongManager songManager = new SongManager();
 
 
     public void addSong(ActionEvent actionEvent) {

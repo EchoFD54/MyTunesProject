@@ -27,8 +27,6 @@ public class NewPlaylistController {
         }
     }
 
-
-
     @FXML
     public void cancelAction(){
         closeWindow();

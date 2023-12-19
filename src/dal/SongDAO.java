@@ -99,34 +99,4 @@ public class SongDAO implements ISongDAO {
             throw new RuntimeException(e);
         }
     }
-
-    /**
-     * @return a list of all Songs saved on the Database of a specific Playlist
-     */
-
-    public List<Song> getSongsFromPlaylist(int playlistId) {
-        List<Song> songs = new ArrayList<>();
-
-        try(Connection con = cm.getConnection())
-        {
-            String sql = "SELECT * FROM Songs WHERE PlaylistId=?";
-            PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, playlistId);
-            ResultSet rs = pstmt.executeQuery();
-            while(rs.next()){
-                int id            = rs.getInt("SongId");
-                String title      = rs.getString("Title");
-                String artist     = rs.getString("Artist");
-                String genre      = rs.getString("Genre");
-                String time       = rs.getString("Time");
-                String filePath   = rs.getString("FilePath");
-
-                Song s = new Song(title, artist, genre, time, filePath);
-                songs.add(s);
-            }
-            return songs;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }
