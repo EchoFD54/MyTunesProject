@@ -140,11 +140,10 @@ public class MainWindowController {
                 Duration duration = newMediaPlayer.getMedia().getDuration();
                 String formattedTime = formatDuration(duration);
 
-                // Update the current song's duration in the TableView
+                // Update the current song's duration in the TableView and songs title
                 Song currentSong = songTableView.getItems().get(songIndex);
                 currentSong.setTime(formattedTime);
-
-                // Update the TextFlow with the current song's name
+                currentSongName = currentSong.titleProperty().get();
                 updateTextFlow();
             });
 
@@ -425,7 +424,7 @@ public class MainWindowController {
 
         if (selectedSong != null) {
             // Open the AddSongWindowController with the selected song's properties
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("AddSongWindow.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/views/AddSongWindow.fxml"));
             Parent root;
             try {
                 root = loader.load();
@@ -602,6 +601,8 @@ public class MainWindowController {
             int selectedSongIndex = songTableView.getSelectionModel().getSelectedIndex();
             if (selectedSongIndex >= 0) {
                 songIndex = selectedSongIndex;
+                currentSongName = newValue.titleProperty().get();
+                updateTextFlow();
                 playNextSong();
             }
         });
