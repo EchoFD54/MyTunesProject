@@ -135,7 +135,6 @@ public class MainWindowController {
                 playNextSong();
             });
 
-            // Set up the ready event handler to update the duration
             newMediaPlayer.setOnReady(() -> {
                 Duration duration = newMediaPlayer.getMedia().getDuration();
                 String formattedTime = formatDuration(duration);

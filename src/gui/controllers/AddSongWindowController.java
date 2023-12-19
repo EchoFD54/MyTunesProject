@@ -3,6 +3,7 @@ package gui.controllers;
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextField;
 import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -14,8 +15,10 @@ public class AddSongWindowController {
     public TextField genreField;
     public TextField artistField;
     public TextField titleField;
+    public TextField timeField;
     private MainWindowController mainWindowController;
     private Stage stage;
+    private Duration totalSongDuration;
 
 
     public void addSong(ActionEvent actionEvent) {
@@ -45,8 +48,16 @@ public class AddSongWindowController {
         File selectedFile = fileChooser.showOpenDialog(null);
 
         if (selectedFile != null) {
-            // Set the selected file path to the fileField
             fileField.setText(selectedFile.getAbsolutePath());
+
+            Media newMedia = new Media(selectedFile.toURI().toString());
+            MediaPlayer mediaPlayer = new MediaPlayer(newMedia);
+            mediaPlayer.setOnReady(() -> {
+                totalSongDuration= mediaPlayer.getTotalDuration();
+                String formattedTime = formatDuration(totalSongDuration);
+                timeField.setText(formattedTime);
+                mediaPlayer.dispose();
+            });
         }
     }
 
