@@ -30,42 +30,23 @@ import java.util.List;
 
 public class MainWindowController {
     @FXML
-    public Slider volumeSlider;
+    private Slider volumeSlider, songProgress;
     @FXML
-    public Button playBtn;
+    private Button playBtn, addSongsBtn, filterBtn;
     @FXML
-    public Slider songProgress;
+    private Label timerLabel;
     @FXML
-    public Button nextBtn;
+    private TextFlow songTextFlow;
     @FXML
-    public Button previousBtn;
-    @FXML
-    public Label timerLabel;
-    @FXML
-    public TextFlow songTextFlow;
-    @FXML
-    public Button addSongsBtn;
-    @FXML
-    public TableView<Song> songTableView;
-    @FXML
+    private TableView<Song> songTableView, songsInPlaylist;
     public TableView<Playlist> playlistList;
     @FXML
-    public TableColumn titleColumn,artistColumn,genreColumn,timeColumn,playlistName,songs,time, titleCol, artistCol, genreCol, timeCol;
-    @FXML
-    public Button editBtn;
-    @FXML
-    public TableView<Song> songsInPlaylist;
-    @FXML
-    public Button delBtn;
-    @FXML
-    public Button filterBtn;
-    @FXML
-    public TextField filterTextField;
-    @FXML
-    private ListView<String> songListView;
+    private TextField filterTextField;
     @FXML
     private MediaView mediaView;
+    @FXML
     private MediaPlayer mediaPlayer;
+    @FXML
     private List<Media> songList = new ArrayList<>();
 
     private Playlist selectedPlaylist;
@@ -74,44 +55,30 @@ public class MainWindowController {
     private boolean canPlaySong = false;
     private String currentSongName = "";
     private AddSongWindowController addSongController;
-
-    SongManager songManager = new SongManager();
-    PlaylistManager playlistManager = new PlaylistManager();
+    private SongManager songManager = new SongManager();
+    private PlaylistManager playlistManager = new PlaylistManager();
     private boolean isFilterActive = false;
 
 
     public void initialize() {
         setSongsTableView();
         setUpPlaylistTableView();
+        setUpSongsInPlaylistTableView();
 
         // Show all songs saved on the Database
         for(Song s : songManager.getAllSongs()){
             songTableView.getItems().add(s);
-            // Add all saved songs into songList (to be able to play them)
+            // Add the songs into songList to play them
             if (!songList.contains(s)) {
                 songList.add(new Media(new File(s.getFilePath()).toURI().toString()));
             }
         }
 
-        // Set up the columns in the TableView
-        TableColumn<Song, String> titleCol = (TableColumn<Song, String>) songsInPlaylist.getColumns().get(0);
-        TableColumn<Song, String> artistCol = (TableColumn<Song, String>) songsInPlaylist.getColumns().get(1);
-        TableColumn<Song, String> genreCol = (TableColumn<Song, String>) songsInPlaylist.getColumns().get(2);
-        TableColumn<Song, String> timeCol = (TableColumn<Song, String>) songsInPlaylist.getColumns().get(3);
-
-        // Define cell value factories for each column
-        titleCol.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
-        artistCol.setCellValueFactory(cellData -> cellData.getValue().artistProperty());
-        genreCol.setCellValueFactory(cellData -> cellData.getValue().genreProperty());
-        timeCol.setCellValueFactory(cellData -> cellData.getValue().timeProperty());
-
         // Shows all playlists saved on the Database
         for(Playlist p : playlistManager.getAllPlaylists()){
             playlistList.getItems().add(p);
         }
-
         setButtonAndFilter();
-
     }
 
 
@@ -228,10 +195,11 @@ public class MainWindowController {
         }
     }
 
-    public void deletePlaylist(int selectedPlaylistId){
-        ObservableList<Playlist> playlists = playlistList.getItems();
-        playlists.remove(selectedPlaylistId);
+    public void deletePlaylist(){
+        playlistManager.deletePlaylist(playlistList.getSelectionModel().getSelectedItem().getId().get());
+        refreshPlaylistTableView();
     }
+
     public void editPlaylist(String selectedPlaylistName, Playlist newPlaylistName){
         newPlaylistName.setName(selectedPlaylistName);
         ObservableList<Playlist> playlists = playlistList.getItems();
@@ -240,7 +208,9 @@ public class MainWindowController {
             playlists.set(index, newPlaylistName);  // Update the name of the playlist
             playlistList.setItems(playlists);  // Update the playlistList view
         }
+        refreshPlaylistTableView();
     }
+
     @FXML
     private void openNewPlaylistWindow() {
         try{
@@ -321,6 +291,7 @@ public class MainWindowController {
                 existingSong.setArtist(artist);
                 existingSong.setGenre(genre);
                 existingSong.setTime(time);
+                // Updates the song properties in the database
                 songManager.updateSong(existingSong);
                 songExists = true;
                 break;
@@ -330,6 +301,7 @@ public class MainWindowController {
         // If the song is not in the TableView, add a new one
         if (!songExists) {
             Song newSong = new Song(title, artist, genre, time, filePath);
+            // Adds a new song in the database
             songManager.createSong(newSong);
 
             songList.add(new Media(new File(filePath).toURI().toString()));
@@ -457,14 +429,12 @@ public class MainWindowController {
 
     @FXML
     private void openDeletePlaylistWindow(){
-        int selectedPlayListId = playlistList.getSelectionModel().getSelectedIndex();
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/views/DeletePlaylist.fxml"));
             Parent root = loader.load();
 
             DeletePlaylistController deleteController = loader.getController();
             deleteController.setMainWindowController(this);
-            deleteController.setSelectedId(selectedPlayListId);
 
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -550,7 +520,7 @@ public class MainWindowController {
                 filteredSongs.add(song);
             }
         }
-        
+
         songTableView.setItems(filteredSongs);
         filterBtn.setText("Clear");
         isFilterActive = true;
@@ -562,7 +532,6 @@ public class MainWindowController {
         filterBtn.setText("Filter");
         isFilterActive = false;
     }
-
 
     @FXML
     private void deleteSongFromPlaylist(ActionEvent actionEvent){
@@ -612,13 +581,8 @@ public class MainWindowController {
             }
         });
 
-        if (songList.isEmpty()) {
-            return;
-        }
-
         timerLabel.setText("0:00");
         playNextSong();
-
     }
 
     private int numberSongsInPlaylist(int playlistId){
@@ -644,10 +608,24 @@ public class MainWindowController {
         time.setCellValueFactory(cellData -> cellData.getValue().getTime());
     }
 
-    private void refreshPlaylistTableView() {
+    public void refreshPlaylistTableView() {
         playlistList.getItems().clear();
         List<Playlist> allPlaylists = playlistManager.getAllPlaylists();
         playlistList.getItems().addAll(allPlaylists);
+    }
+
+    private void setUpSongsInPlaylistTableView(){
+        // Set up the columns in the TableView
+        TableColumn<Song, String> titleCol = (TableColumn<Song, String>) songsInPlaylist.getColumns().get(0);
+        TableColumn<Song, String> artistCol = (TableColumn<Song, String>) songsInPlaylist.getColumns().get(1);
+        TableColumn<Song, String> genreCol = (TableColumn<Song, String>) songsInPlaylist.getColumns().get(2);
+        TableColumn<Song, String> timeCol = (TableColumn<Song, String>) songsInPlaylist.getColumns().get(3);
+
+        // Define cell value factories for each column
+        titleCol.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
+        artistCol.setCellValueFactory(cellData -> cellData.getValue().artistProperty());
+        genreCol.setCellValueFactory(cellData -> cellData.getValue().genreProperty());
+        timeCol.setCellValueFactory(cellData -> cellData.getValue().timeProperty());
     }
 }
 

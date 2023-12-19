@@ -13,17 +13,16 @@ public class EditPlaylistController {
     private Playlist selectedPlaylistName;
     private PlaylistManager playlistManager = new PlaylistManager();
 
+
     public void setMainWindowController(MainWindowController controller){
         this.mainWindowController = controller;
     }
 
-    @FXML
     public void setSelectedPlaylistName(Playlist playlistName){
         this.selectedPlaylistName = playlistName;
         editPlaylistNameField.setText(playlistName.getName().getValue());
     }
 
-    @FXML
     public void saveEditedPlaylist(){
         if (selectedPlaylistName != null) {
             String newPlaylistName = editPlaylistNameField.getText().trim();
@@ -41,7 +40,6 @@ public class EditPlaylistController {
         stage.close();
     }
 
-    @FXML
     public void cancelAction(){
         closeEditedWindow();
     }

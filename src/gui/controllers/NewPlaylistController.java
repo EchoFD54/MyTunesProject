@@ -23,6 +23,7 @@ public class NewPlaylistController {
             mainWindowController.createPlaylist(playlist);
             mainWindowController.getPlaylist(playlist);
             playlistManager.createPlaylist(playlist);
+            mainWindowController.refreshPlaylistTableView();
             closeWindow();
         }
     }
