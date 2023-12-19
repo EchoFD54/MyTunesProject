@@ -169,17 +169,17 @@ public class MainWindowController {
                 mediaPlayer = new MediaPlayer(songList.get(0));
                 mediaView.setMediaPlayer(mediaPlayer);
                 setVolumeSlider();  // Initialize volume slider
-                playBtn.setText("Pause");
+                playBtn.setText("⏸");
                 playCurrentSong();
             }
         } else {
             // Toggle between play and pause
             if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
                 mediaPlayer.pause();
-                playBtn.setText("Play");
+                playBtn.setText("▶");
             } else {
                 playCurrentSong();
-                playBtn.setText("Pause");
+                playBtn.setText("⏸");
             }
         }
     }
