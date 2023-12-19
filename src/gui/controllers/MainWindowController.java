@@ -123,8 +123,6 @@ public class MainWindowController {
 
         if (songIndex < songList.size()) {
             MediaPlayer newMediaPlayer = new MediaPlayer(songList.get(songIndex));
-
-            // Set the volume to the value from the previous MediaPlayer
             if (mediaPlayer != null) {
                 newMediaPlayer.setVolume(mediaPlayer.getVolume());
             }
@@ -138,8 +136,6 @@ public class MainWindowController {
             newMediaPlayer.setOnReady(() -> {
                 Duration duration = newMediaPlayer.getMedia().getDuration();
                 String formattedTime = formatDuration(duration);
-
-                // Update the current song's duration in the TableView and songs title
                 Song currentSong = songTableView.getItems().get(songIndex);
                 currentSong.setTime(formattedTime);
                 currentSongName = currentSong.titleProperty().get();

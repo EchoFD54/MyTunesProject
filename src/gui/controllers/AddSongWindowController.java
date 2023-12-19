@@ -28,17 +28,14 @@ public class AddSongWindowController {
         String genre = genreField.getText();
         String filePath = fileField.getText();
 
-        // Create a new Media object from the selected file path
-        Media newMedia = new Media(new File(filePath).toURI().toString());
-
         // Get the actual duration of the song
+        Media newMedia = new Media(new File(filePath).toURI().toString());
         Duration duration = newMedia.getDuration();
         String formattedTime = formatDuration(duration);
 
         // Update the song properties in the MainWindowController
         mainWindowController.updateSongProperties(title, artist, genre, formattedTime, filePath);
 
-        // Close the AddSongWindow
         ((Stage) titleField.getScene().getWindow()).close();
     }
 
@@ -49,7 +46,7 @@ public class AddSongWindowController {
 
         if (selectedFile != null) {
             fileField.setText(selectedFile.getAbsolutePath());
-
+            //Display the duration of the song
             Media newMedia = new Media(selectedFile.toURI().toString());
             MediaPlayer mediaPlayer = new MediaPlayer(newMedia);
             mediaPlayer.setOnReady(() -> {
