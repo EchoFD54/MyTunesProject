@@ -204,7 +204,7 @@ public class MainWindowController {
         songProgress.valueChangingProperty().setValue(null);
         songProgress.valueChangingProperty().addListener((observable, oldValue, isChanging) -> {
             if (!isChanging) {
-                playBtn.setText("Play");
+                playBtn.setText("▶");
                 double duration = mediaPlayer.getTotalDuration().toMillis();
                 double currentTime = songProgress.getValue() * duration / 100.0;
                 mediaPlayer.seek(new Duration(currentTime));
@@ -215,7 +215,7 @@ public class MainWindowController {
         songProgress.valueChangingProperty().setValue(null);
         mediaPlayer.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
             if (!songProgress.isValueChanging()) {
-                playBtn.setText("Pause");
+                playBtn.setText("⏸");
                 double progress = (newValue.toMillis() / mediaPlayer.getTotalDuration().toMillis()) * 100.0;
                 songProgress.setValue(progress);
             }
@@ -249,7 +249,7 @@ public class MainWindowController {
     @FXML
     private void openNewPlaylistWindow() {
         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("NewPlaylist.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/views/NewPlaylist.fxml"));
             Parent root = loader.load();
 
             NewPlaylistController newWindowController = loader.getController();
@@ -464,7 +464,7 @@ public class MainWindowController {
     private void openDeletePlaylistWindow(){
         int selectedPlayListId = playlistList.getSelectionModel().getSelectedIndex();
         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("DeletePlaylist.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/views/DeletePlaylist.fxml"));
             Parent root = loader.load();
 
             DeletePlaylistController deleteController = loader.getController();
@@ -494,7 +494,7 @@ public class MainWindowController {
         Playlist selectedPlaylistName = playlistList.getSelectionModel().getSelectedItems().get(0);  // Retrieve the selected playlist name
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("EditPlaylist.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/views/EditPlaylist.fxml"));
             Parent root = loader.load();
 
             EditPlaylistController editPlaylistController = loader.getController();
