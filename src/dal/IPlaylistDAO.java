@@ -25,17 +25,24 @@ public interface IPlaylistDAO {
     void createPlaylist(Playlist playlist);
 
     /**
-     * @return a list of playlists
+     * @return a list of playlists saved on the database
      */
     List<Playlist> getAllPlaylists();
 
+    /**
+     * Associates a song with a playlist in the database
+     */
     List<Song> createSongsOfPlaylist(int PlaylistId, int SongsId);
 
+    /**
+     * @return a list of songs from a specific playlist saved on the database
+     */
     List<Song> getAllSongsOfPlaylist(int PlaylistId);
 
     Playlist getPlaylistById(int playlistId);
 
-    void updatePlaylist(Playlist playlist);
-
+    /**
+     * Deletes a song in a playlist
+     */
     void deleteSongFromPlaylist(int songId, int playlistId);
 }

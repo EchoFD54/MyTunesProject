@@ -18,10 +18,14 @@ public class PlaylistDAO implements IPlaylistDAO {
     public void deletePlaylist(int playlistId) {
         try(Connection con = cm.getConnection())
         {
-            String sql = "DELETE FROM Playlists WHERE PlaylistId=?";
+            String sql = "DELETE FROM songInPlaylist WHERE PlaylistId=?";
+            String sql1 = "DELETE FROM Playlists WHERE PlaylistId=?";
             PreparedStatement pstmt = con.prepareStatement(sql);
+            PreparedStatement pstmt1 = con.prepareStatement(sql1);
             pstmt.setInt(1, playlistId);
             pstmt.execute();
+            pstmt1.setInt(1, playlistId);
+            pstmt1.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -64,7 +68,7 @@ public class PlaylistDAO implements IPlaylistDAO {
     }
 
     /**
-     * @return a list of playlists
+     * @return a list of playlists saved on the database
      */
     @Override
     public List<Playlist> getAllPlaylists() {
@@ -89,6 +93,9 @@ public class PlaylistDAO implements IPlaylistDAO {
         }
     }
 
+    /**
+     * Associates a song with a playlist in the database
+     */
     @Override
     public List<Song> createSongsOfPlaylist(int PlaylistId, int SongsId) {
         try(Connection con = cm.getConnection())
@@ -105,6 +112,9 @@ public class PlaylistDAO implements IPlaylistDAO {
         return null;
     }
 
+    /**
+     * @return a list of songs from a specific playlist saved on the database
+     */
     @Override
     public List<Song> getAllSongsOfPlaylist(int PlaylistId) {
         List<Song> SongsInPlaylist = new ArrayList<>();
@@ -154,11 +164,9 @@ public class PlaylistDAO implements IPlaylistDAO {
         return null;
     }
 
-    @Override
-    public void updatePlaylist(Playlist playlist) {
-
-    }
-
+    /**
+     * Deletes a song in a playlist
+     */
     public void deleteSongFromPlaylist(int songId, int playlistId){
         try(Connection con = cm.getConnection())
         {
