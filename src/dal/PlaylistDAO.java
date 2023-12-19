@@ -47,7 +47,7 @@ public class PlaylistDAO implements IPlaylistDAO {
 
     /**
      * Creates a Playlist on the Database
-     * Values to create: Name & Time (Time is automatically calculated?)
+     * Values to create: Name & Time
      */
     @Override
     public void createPlaylist(Playlist playlist) {
@@ -64,7 +64,6 @@ public class PlaylistDAO implements IPlaylistDAO {
     }
 
     /**
-     * Need UPDATE: change List<Song> for List<Playlist>
      * @return a list of playlists
      */
     @Override
@@ -91,7 +90,7 @@ public class PlaylistDAO implements IPlaylistDAO {
     }
 
     @Override
-    public List<Song> CreateSongsOfPlaylist(int PlaylistId, int SongsId) {
+    public List<Song> createSongsOfPlaylist(int PlaylistId, int SongsId) {
         try(Connection con = cm.getConnection())
         {
             String sql = "INSERT INTO songInPlaylist(playlistid, songsid) VALUES (?,?)";
@@ -138,7 +137,7 @@ public class PlaylistDAO implements IPlaylistDAO {
     public Playlist getPlaylistById(int playlistId){
         try(Connection con = cm.getConnection())
         {
-            String sql = "SELECT * FROM Playlist WHERE PlaylistId=?";
+            String sql = "SELECT * FROM Playlists WHERE PlaylistId=?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, playlistId);
             ResultSet rs = ps.executeQuery();
@@ -158,5 +157,18 @@ public class PlaylistDAO implements IPlaylistDAO {
     @Override
     public void updatePlaylist(Playlist playlist) {
 
+    }
+
+    public void deleteSongFromPlaylist(int songId, int playlistId){
+        try(Connection con = cm.getConnection())
+        {
+            String sql = "DELETE FROM songInPlaylist WHERE SongsId=? AND PlaylistId=?";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, songId);
+            pstmt.setInt(2, playlistId);
+            pstmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

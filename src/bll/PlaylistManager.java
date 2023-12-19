@@ -3,14 +3,11 @@ package bll;
 import be.Playlist;
 import be.Song;
 import dal.IPlaylistDAO;
-import dal.ISongDAO;
 import dal.PlaylistDAO;
-import dal.SongDAO;
 
 import java.util.List;
 
 public class PlaylistManager {
-    ISongDAO songDAO = new SongDAO();
     IPlaylistDAO playlistDAO = new PlaylistDAO();
 
     /**
@@ -35,7 +32,6 @@ public class PlaylistManager {
     }
 
     /**
-     * Need UPDATE: change List<Song> for List<Playlist>
      * @return a list of playlists
      * Gets all the Playlists saved on the Database
      */
@@ -43,20 +39,16 @@ public class PlaylistManager {
         return playlistDAO.getAllPlaylists();
     }
 
-    public List<Song> CreateSongsOfPlaylist(int PlaylistId, int SongsId){
-        return playlistDAO.CreateSongsOfPlaylist(PlaylistId, SongsId);
+    public List<Song> createSongsOfPlaylist(int PlaylistId, int SongsId){
+        return playlistDAO.createSongsOfPlaylist(PlaylistId, SongsId);
     }
 
     public List<Song> getAllSongsOfPlaylist(int PlaylistId){
         return playlistDAO.getAllSongsOfPlaylist(PlaylistId);
     }
 
-    public void removeSongFromPlaylist(int playlistId, int songId){
-        List<Song> songsInPlaylist = getAllSongsOfPlaylist(playlistId);
-        songsInPlaylist.removeIf(song -> song.getSongId() == songId);
-        Playlist playlist = playlistDAO.getPlaylistById(playlistId);
-        playlist.setSongs(songsInPlaylist.toString());
-        playlistDAO.updatePlaylist(playlist);
+    public void deleteSongFromPlaylist(int songId, int playlistId){
+        playlistDAO.deleteSongFromPlaylist(songId, playlistId);
     }
 
 }
