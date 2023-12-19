@@ -482,26 +482,14 @@ public class MainWindowController {
         }
     }
 
-
-    private void updateSongsInPlaylist(){
-        if (selectedPlaylist != null) {
-            //songTableView.setItems(selectedPlaylist.getSongs());
-        }
-        else {
-            // Clear the song list view if no playlist is selected
-            songTableView.setItems(FXCollections.observableArrayList());
-        }
-    }
-
     public void addSelectedSongToPlaylist(){
-        Integer PlaylistId = playlistList.getSelectionModel().getSelectedItem().getId().get();
-        Integer SongsId = songTableView.getSelectionModel().getSelectedItem().songIdProperty().get();
-        if(PlaylistId != null && SongsId != null){
-            playlistManager.CreateSongsOfPlaylist(PlaylistId, SongsId);
+        Integer playlistId = playlistList.getSelectionModel().getSelectedItem().getId().get();
+        Integer songId = songTableView.getSelectionModel().getSelectedItem().songIdProperty().get();
+        if (playlistId != null && songId != null) {
+            playlistManager.createSongsOfPlaylist(playlistId, songId);
         }
         refreshPlaylistTableView();
     }
-
     @FXML
     private void openEditPlaylistWindow(){
         Playlist selectedPlaylistName = playlistList.getSelectionModel().getSelectedItems().get(0);  // Retrieve the selected playlist name
@@ -587,8 +575,9 @@ public class MainWindowController {
         Song selectedSong = songsInPlaylist.getSelectionModel().getSelectedItem();
         if (selectedSong != null){
             Playlist selectedPlaylist = playlistList.getSelectionModel().getSelectedItem();
-            playlistManager.removeSongFromPlaylist(selectedPlaylist.getId().get(), selectedSong.getSongId());
+            playlistManager.deleteSongFromPlaylist(selectedSong.songIdProperty().get(), selectedPlaylist.getId().get());
             songsInPlaylist.getItems().remove(selectedSong);
+            refreshPlaylistTableView();
         }
     }
 
@@ -661,10 +650,8 @@ public class MainWindowController {
 
     private void refreshPlaylistTableView() {
         playlistList.getItems().clear();
-        playlistList.getItems().addAll(playlistManager.getAllPlaylists());
+        List<Playlist> allPlaylists = playlistManager.getAllPlaylists();
+        playlistList.getItems().addAll(allPlaylists);
     }
-
-
-
 }
 
