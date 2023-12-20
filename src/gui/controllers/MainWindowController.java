@@ -580,9 +580,7 @@ public class MainWindowController {
                 clearFilter();
             }
         });
-
         timerLabel.setText("0:00");
-        playNextSong();
     }
 
     private int numberSongsInPlaylist(int playlistId){
