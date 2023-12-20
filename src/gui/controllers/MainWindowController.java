@@ -62,22 +62,9 @@ public class MainWindowController {
 
     public void initialize() {
         setSongsTableView();
+        dataBaseSetUp();
         setUpPlaylistTableView();
         setUpSongsInPlaylistTableView();
-
-        // Show all songs saved on the Database
-        for(Song s : songManager.getAllSongs()){
-            songTableView.getItems().add(s);
-            // Add the songs into songList to play them
-            if (!songList.contains(s)) {
-                songList.add(new Media(new File(s.getFilePath()).toURI().toString()));
-            }
-        }
-
-        // Shows all playlists saved on the Database
-        for(Playlist p : playlistManager.getAllPlaylists()){
-            playlistList.getItems().add(p);
-        }
         setButtonAndFilter();
     }
 
@@ -624,6 +611,22 @@ public class MainWindowController {
         artistCol.setCellValueFactory(cellData -> cellData.getValue().artistProperty());
         genreCol.setCellValueFactory(cellData -> cellData.getValue().genreProperty());
         timeCol.setCellValueFactory(cellData -> cellData.getValue().timeProperty());
+    }
+
+    private void dataBaseSetUp(){
+        // Show all songs saved on the Database
+        for(Song s : songManager.getAllSongs()){
+            songTableView.getItems().add(s);
+            // Add the songs into songList to play them
+            if (!songList.contains(s)) {
+                songList.add(new Media(new File(s.getFilePath()).toURI().toString()));
+            }
+        }
+
+        // Shows all playlists saved on the Database
+        for(Playlist p : playlistManager.getAllPlaylists()){
+            playlistList.getItems().add(p);
+        }
     }
 }
 
