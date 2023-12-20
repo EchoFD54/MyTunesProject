@@ -13,7 +13,7 @@ public class Song {
     private StringProperty genre;
     private StringProperty time;
     private StringProperty filePath;
-    private IntegerProperty songId;
+    private IntegerProperty songId = new SimpleIntegerProperty();
 
     public Song(String title, String artist, String genre, String time) {
         this.title = new SimpleStringProperty(title);
